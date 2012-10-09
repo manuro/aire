@@ -1,0 +1,72 @@
+Copyright (C) 2012 The contributors of aire
+
+This program is free software: you can redistribute it and/or modify  
+it under the terms of the GNU General Public License as published by  
+the Free Software Foundation, either version 3 of the License.  
+
+This program is distributed in the hope that it will be useful,  
+but WITHOUT ANY WARRANTY; without even the implied warranty of  
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the  
+GNU General Public License for more details.  
+
+You should have received a copy of the GNU General Public License  
+along with this program. If not, see <http://www.gnu.org/licenses/>.
+
+Module: utility
+
+Developers: 
+Manuel Rodriguez Rodriguez <famrods@gmail.com> [manuro]
+
+1. Abstract
+-------------------------------------------------------------------------------
+The utility package implements some basic utility functionality for threads, 
+time measurement, streams and I/O.
+
+2. Example
+-------------------------------------------------------------------------------
+2.1 Using the time measurment
+
+#include "Watch.h"
+// Start the timer
+aire::StopWatch::GetInstance()->getTimer("One timer")->start();
+... // Do something
+// Stop the timer
+aire::StopWatch::GetInstance()->getTimer("One timer")->stop();
+// Print the timers
+aire::StopWatch::GetInstance()->printTime(std::cout, false);
+
+3. Design
+-------------------------------------------------------------------------------
+The module consits of the following classes:
+* Event - Signal and event 
+* Guard - Automated lock and unlock
+* Mutex - Simple mutex 
+* Singelton - Singleton template with lock and unlock
+* Stream - Synchronized stream for thread output
+* Thread - Basic threads
+* Timer - Basic timer
+* Watch - Collection of timers
+* Test - Test case execution wrapper
+* Tools - Some very tricky helper functions
+* System - Basic system class
+
+4. Test
+-------------------------------------------------------------------------------
+All test cases are included in the test harness. They can be build and 
+executed using the makefile by "make arch=<yourarch> test".
+
+The following test cases are implemented to test the utility module:
+* CheckTimer - Creates a timer and checks if the overhead is not huge.
+* CreateThread - Creates and join a single thread.
+* LockWithMutex - Lock and unlock using 2 threads and the Mutex class.
+* SignalAndWait - Signal and wait using 2 threads and the Event class.
+* SimpleWatch - Time multiple code parts and print the results.
+* ThreadOutput - Print out synchronized thread id.
+
+5. Notes
+-------------------------------------------------------------------------------
+Singleton template is thread-safe by lock and unlock in the GetInstance() 
+using the Guard class. Please cache the usage of the Singleton by assigning 
+it to a global scoped variable to avoid lock and unlock everytime you access 
+the singleton.
+
