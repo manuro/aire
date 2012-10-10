@@ -14,7 +14,7 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 //
 //! \file Watch.h
-//! \brief Implementation of the watch.
+//! \brief Watch that can take multiple timers.
 #ifndef WATCH_H
 #define WATCH_H
 
@@ -31,7 +31,7 @@
 namespace aire
 {
 
-//! \brief Defines the watch class.
+//! \brief Watch that can take multiple timers.
 // 
 // This class is not thread safe and it is not suposed 
 // to be thread safe. In a multi-threadded environment 

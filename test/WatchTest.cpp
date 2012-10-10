@@ -26,7 +26,7 @@
 
 int main()
 {
-   Test test("Watch-Test");
+   aire::Test test("Watch-Test");
 
    test.add("Check timer and overhead", [] () {
       int result = EXIT_SUCCESS;
@@ -100,7 +100,7 @@ int main()
    }
    );
 
-   test.run(true);
+   test.run();
   
    return EXIT_SUCCESS;
 }

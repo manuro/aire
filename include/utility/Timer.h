@@ -13,7 +13,7 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 //
 //! \file Timer.h
-//! \brief Implementation of the timer. 
+//! \brief Timer that measures the time using start and stop. 
 #ifndef TIMER_H
 #define TIMER_H
 
@@ -45,7 +45,7 @@ inline timespec timediff(timespec startTime, timespec endTime)
 namespace aire
 {
 
-//! \brief Defines the timer class.
+//! \brief Timer that measures the time using start and stop.
 //!
 //! A measurement can be started and stopped multiple times. The timespan 
 //! is added to the total time.  

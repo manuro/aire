@@ -13,7 +13,7 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 //
 //! \file Thread.h
-//! \brief Implementation of the thread. 
+//! \brief Thread implementation on system level. 
 #ifndef THREAD_H
 #define THREAD_H
 
@@ -31,7 +31,7 @@
 namespace aire
 {
 
-//! \brief Defines the thread class.
+//! \brief Thread implementation on system level.
 class Thread
 {
 public:

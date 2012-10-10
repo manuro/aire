@@ -13,7 +13,7 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 //
 //! \file Event.h
-//! \brief Implementation of an event. 
+//! \brief Event class for thread signals. 
 #ifndef EVENT_H
 #define EVENT_H
 
@@ -31,7 +31,7 @@
 namespace aire 
 {
 
-//! \brief Defines the event class.
+//! \brief Event class for thread signals.
 class Event
 {
 public:

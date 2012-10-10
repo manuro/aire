@@ -31,11 +31,11 @@ int main()
       return result;
    };
 
-   Test test("System-Test");
+   aire::Test test("System-Test");
    
    test.add("Get system information", func);
 
-   test.run(true);
+   test.run();
   
    return EXIT_SUCCESS;
 }

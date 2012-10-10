@@ -17,11 +17,22 @@
 #ifndef BLAME_H
 #define BLAME_H
 
+#include <functional>
 #include <cstdint>
 
-#define A(i,j) A[((i)*(N))+(j)]
-#define B(i,j) B[((i)*(N))+(j)]
+//! \brief Defines matrix access pattern.
+//#define A(i,j) A[((i)*(N))+(j)]
+//#define B(i,j) B[((i)*(N))+(j)]
 
+//! \brief Global aire namespace.
+namespace aire 
+{
+
+//! \brief Scales a vector.
+//! \param a The scalar for the multiplication with x.
+//! \param x Vector with N elements.
+//!
+//! This function computes: x = a * x with scalar a and vector x.
 template<class TYPE, uint32_t N>
 inline void scal(const TYPE a, TYPE* x)
 {
@@ -34,12 +45,12 @@ inline void scal(const TYPE a, TYPE* x)
    }
 }
 
-//! \brief Vector-Vector addition with a scalr multiplication.
-//! \param alpha The scalar for the multiplication with x.
+//! \brief Vector-Vector addition with a scalar multiplication.
+//! \param a The scalar for the multiplication with x.
 //! \param x Vector with N elements.
 //! \param y Vector with N elements.
 //!
-//! This function computes: y = alpha * x + y with sclar alpha, vector x and y.
+//! This function computes: y = a * x + y with scalar alpha, vector x and y.
 template<class TYPE, uint32_t N>
 inline void axpy(const TYPE a, TYPE* x, TYPE* y)
 {
@@ -66,41 +77,69 @@ inline void axpy(const TYPE a, TYPE* x, TYPE* y)
    }   
 }
 
+//! \brief Computes the determinat of a matrix.
+//! \param A Matrix of size (NxN).
+//! \return The determinat of the matrix
 template<class TYPE, uint32_t N>
-inline TYPE det(const TYPE& A)
+inline TYPE det(const TYPE* A, std::function<uint32_t (uint32_t, uint32_t)> idx)
 {
    TYPE d = 0;
    
    if(N == 4)
    {
-      d = A(0,0)*A(1,1)*A(2,2)*A(3,3) + A(0,0)*A(1,2)*A(2,3)*A(3,1)
-        + A(0,0)*A(1,3)*A(2,1)*A(3,2) + A(0,1)*A(1,0)*A(2,3)*A(3,2)
-        + A(0,1)*A(1,2)*A(2,0)*A(3,3) + A(0,1)*A(1,3)*A(2,2)*A(3,0)
-        + A(0,2)*A(1,0)*A(2,1)*A(3,3) + A(0,2)*A(1,1)*A(2,3)*A(3,0)
-        + A(0,2)*A(1,3)*A(2,0)*A(3,1) + A(0,3)*A(1,0)*A(2,2)*A(3,1)
-        + A(0,3)*A(1,1)*A(2,0)*A(3,2) + A(0,3)*A(1,2)*A(2,1)*A(3,0)
-        - A(0,0)*A(1,1)*A(2,3)*A(3,2) - A(0,0)*A(1,2)*A(2,1)*A(3,3)
-        - A(0,0)*A(1,3)*A(2,2)*A(3,1) - A(0,1)*A(1,0)*A(2,2)*A(3,3)
-        - A(0,1)*A(1,2)*A(2,3)*A(3,0) - A(0,1)*A(1,3)*A(2,0)*A(3,2)
-        - A(0,2)*A(1,0)*A(2,3)*A(3,1) - A(0,2)*A(1,1)*A(2,0)*A(3,3)
-        - A(0,2)*A(1,3)*A(2,1)*A(3,0) - A(0,3)*A(1,0)*A(2,1)*A(3,2)
-        - A(0,3)*A(1,1)*A(2,2)*A(3,0) - A(0,3)*A(1,2)*A(2,0)*A(3,1);
+      d = A[idx(0,0)]*A[idx(1,1)]*A[idx(2,2)]*A[idx(3,3)]
+        + A[idx(0,0)]*A[idx(1,2)]*A[idx(2,3)]*A[idx(3,1)]
+        + A[idx(0,0)]*A[idx(1,3)]*A[idx(2,1)]*A[idx(3,2)]
+        + A[idx(0,1)]*A[idx(1,0)]*A[idx(2,3)]*A[idx(3,2)]
+        + A[idx(0,1)]*A[idx(1,2)]*A[idx(2,0)]*A[idx(3,3)]
+        + A[idx(0,1)]*A[idx(1,3)]*A[idx(2,2)]*A[idx(3,0)]
+        + A[idx(0,2)]*A[idx(1,0)]*A[idx(2,1)]*A[idx(3,3)]
+        + A[idx(0,2)]*A[idx(1,1)]*A[idx(2,3)]*A[idx(3,0)]
+        + A[idx(0,2)]*A[idx(1,3)]*A[idx(2,0)]*A[idx(3,1)]       
+        + A[idx(0,3)]*A[idx(1,0)]*A[idx(2,2)]*A[idx(3,1)]
+        + A[idx(0,3)]*A[idx(1,1)]*A[idx(2,0)]*A[idx(3,2)]
+        + A[idx(0,3)]*A[idx(1,2)]*A[idx(2,1)]*A[idx(3,0)]
+        - A[idx(0,0)]*A[idx(1,1)]*A[idx(2,3)]*A[idx(3,2)]
+        - A[idx(0,0)]*A[idx(1,2)]*A[idx(2,1)]*A[idx(3,3)]
+        - A[idx(0,0)]*A[idx(1,3)]*A[idx(2,2)]*A[idx(3,1)]           
+        - A[idx(0,1)]*A[idx(1,0)]*A[idx(2,2)]*A[idx(3,3)]
+        - A[idx(0,1)]*A[idx(1,2)]*A[idx(2,3)]*A[idx(3,0)]
+        - A[idx(0,1)]*A[idx(1,3)]*A[idx(2,0)]*A[idx(3,2)]
+        - A[idx(0,2)]*A[idx(1,0)]*A[idx(2,3)]*A[idx(3,1)]
+        - A[idx(0,2)]*A[idx(1,1)]*A[idx(2,0)]*A[idx(3,3)]
+        - A[idx(0,2)]*A[idx(1,3)]*A[idx(2,1)]*A[idx(3,0)]            
+        - A[idx(0,3)]*A[idx(1,0)]*A[idx(2,1)]*A[idx(3,2)]
+        - A[idx(0,3)]*A[idx(1,1)]*A[idx(2,2)]*A[idx(3,0)]
+        - A[idx(0,3)]*A[idx(1,2)]*A[idx(2,0)]*A[idx(3,1)];
    }
    else if(N == 3)
    {
       //     | a b c |
       // A = | d e f | -> det(A) = aei + bfg + cdh - ceg - bdi - afh
       //     | g h i |
-      d = A(0,0)*A(1,1)*A(2,2) + A(0,1)*A(2,1)*A(2,0) + A(0,2)*A(1,0)*A(2,1)
-        - A(0,2)*A(1,1)*A(2,2) + A(0,1)*A(1,0)*A(2,2) + A(0,0)*A(1,2)*A(2,1);
+      d = A[idx(0,0)]*A[idx(1,1)]*A[idx(2,2)] 
+        + A[idx(0,1)]*A[idx(1,2)]*A[idx(2,0)] 
+        + A[idx(0,2)]*A[idx(1,0)]*A[idx(2,1)]
+        - A[idx(0,2)]*A[idx(1,1)]*A[idx(2,0)] 
+        - A[idx(0,1)]*A[idx(1,0)]*A[idx(2,2)] 
+        - A[idx(0,0)]*A[idx(1,2)]*A[idx(2,1)];
    }
    else if(N == 2)
    {
-      d = A(0,0)*A(1,1) - A(0,1)*A(1,0);
+      //     | a b |
+      // A = | c d | -> det(A) = ad - bc
+      d = A[idx(0,0)]*A[idx(1,1)] 
+        - A[idx(0,1)]*A[idx(1,0)];
    }
-   return det;
+   else if(N == 1)
+   {
+      // A = | a | -> det(A) = 1 / a
+      d = 1 / A[idx(0,0)];
+   }
+   return d;
 }
 
+}
 ////! \todo Optimize this function by implementing all possible branches.
 ////! Possible branches
 ////! a in {!=0, 0, 1}

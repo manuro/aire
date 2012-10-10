@@ -13,7 +13,7 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 //
 //! \file Stream.h
-//! \brief Implementation of the stream. 
+//! \brief Stream for synchronized parallel output. 
 #ifndef STREAM_H
 #define STREAM_H
 
@@ -24,7 +24,7 @@
 namespace aire 
 {
 
-//! \brief Defines a synchronized output stream.
+//! \brief Stream for synchronized parallel output.
 //!
 //! This class implements a stream that is synchronized for output from 
 //! different threads. Use it as:

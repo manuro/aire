@@ -13,7 +13,7 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 //
 //! \file System.h
-//! \brief Basic system class.
+//! \brief System helper class.
 #ifndef SYSTEM_H
 #define SYSTEM_H
 
@@ -26,8 +26,10 @@
 #include <windows.h>
 #endif
 
+//! \brief Global aire namespace.
 namespace aire {
 
+//! \brief System helper class.
 class System 
 {
 public:

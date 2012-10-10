@@ -17,22 +17,22 @@
 #include <cstdlib>
 #include <cmath>
 #include "Test.h"
-#include "VectorScal.h"
-#include "VectorAxpy.h"
+#include "BlameVector.h"
+#include "BlameMatrix.h"
 
 #include <cstdint>
 
 template<typename TYPE, uint32_t N>
-void addTests(Test& test)
+void addTests(aire::Test& test)
 {
    // --- SCAL
-   test.add(std::to_string(N) + typeid(TYPE).name() + "-Scal positive ", 
+   test.add(std::to_string(N) + typeid(TYPE).name() + "-SCAL positive ", 
       scalPositive<TYPE, N>);
-   test.add(std::to_string(N) + typeid(TYPE).name() + "-Scal negative ",
+   test.add(std::to_string(N) + typeid(TYPE).name() + "-SCAL negative ",
       scalNegative<TYPE, N>);
-   test.add(std::to_string(N) + typeid(TYPE).name() + "-Scal neutral ", 
+   test.add(std::to_string(N) + typeid(TYPE).name() + "-SCAL neutral ", 
       scalNeutral<TYPE, N>);
-   test.add(std::to_string(N) + typeid(TYPE).name() + "-Scal inverse ", 
+   test.add(std::to_string(N) + typeid(TYPE).name() + "-SCAL inverse ", 
       scalInverse<TYPE, N>);
 
    // --- AXPY
@@ -45,24 +45,27 @@ void addTests(Test& test)
    test.add(std::to_string(N) + typeid(TYPE).name() + "-AXPY zero ", 
       axpyZero<TYPE, N>);
    
-   // --- Det
-   
+   // --- DET
+   test.add(std::to_string(N) + typeid(TYPE).name() + "-DET matrix ", 
+      compDet<TYPE, N>);
 }
 
 
 int main()
 {
-   Test test("Blame-Test");
+   aire::Test test("Blame-Test");
    
    addTests<double, 4>(test);
    addTests<double, 3>(test);
    addTests<double, 2>(test);
+   addTests<double, 1>(test);
 
    addTests<float, 4>(test);
    addTests<float, 3>(test);
    addTests<float, 2>(test);
+   addTests<float, 1>(test);
    
-   test.run(true);
+   test.run();
   
    return EXIT_SUCCESS;
 }

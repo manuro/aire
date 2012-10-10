@@ -13,7 +13,7 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 //
 //! \file Guard.h
-//! \brief Implementation of a lock guard. 
+//! \brief Guard for thread locks. 
 #ifndef GUARD_H
 #define GUARD_H
 
@@ -29,7 +29,7 @@
 namespace aire 
 {
 
-//! \brief Defines the guard class.
+//! \brief Guard for thread locks.
 //!
 //! The guard locks in the constructor and unlocks in the destructor.
 class Guard

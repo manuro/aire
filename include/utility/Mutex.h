@@ -13,7 +13,7 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 //
 //! \file Mutex.h
-//! \brief Implementation of a mutex. 
+//! \brief Mutex for thread locks. 
 #ifndef MUTEX_H
 #define MUTEX_H
 
@@ -29,7 +29,7 @@
 namespace aire 
 {
 
-//! \brief Defines the mutex class.
+//! \brief Mutex for thread locks.
 //!
 //! The class implements a mutex construct. It is possible to use the 
 //! ordinary lock approach or either a spin lock approach.

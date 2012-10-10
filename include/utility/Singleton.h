@@ -13,7 +13,7 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 //
 //! \file Singleton.h
-//! \brief Implementation of the templated singleton. 
+//! \brief Singleton templated design pattern. 
 #ifndef SINGLETON_H
 #define SINGLETON_H
 
@@ -25,7 +25,7 @@
 namespace aire
 {
 
-//! \brief Defines a template for a singleton class.
+//! \brief Singleton templated design pattern.
 //
 // As we now from: Scott Meyers and Andrei Alexandrescu. 
 // C++ and the Perils of Double-Checked Locking, Doctor Dobb's Journal, 2004.

@@ -21,7 +21,7 @@
 
 int main()
 {
-   Test test("Thread-Test");
+   aire::Test test("Thread-Test");
    
    test.add("Lock with mutex (2 threads)", lockWithMutex<2>);
    test.add("Lock with mutex (8 threads)", lockWithMutex<8>);
@@ -33,7 +33,7 @@ int main()
    test.add("Synchronized print (8 threads)", threadOutput<8>);
    test.add("Synchronized print (32 threads)", threadOutput<32>);
 
-   test.run(true);
+   test.run();
   
    return EXIT_SUCCESS;
 }
