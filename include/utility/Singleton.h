@@ -47,6 +47,7 @@ public:
          try
          {
             _instance = new T;
+            atexit(Singleton<T>::destroy);
          }
          catch(std::bad_alloc& e)
          {
@@ -58,10 +59,19 @@ public:
       return _instance;
    }
   
+  static void destroy()
+  {
+      Guard lock;
+      if(_instance != nullptr)
+      {
+         delete _instance;
+      }
+  }
+  
 protected:
    //! \brief Constructor of the object.
    Singleton() { }
-   
+
    //! \brief Destructor of the object.
    virtual ~Singleton() { }
   
@@ -77,7 +87,8 @@ private:
 };
 
 // Initialize static instance to null.
-template<class T> T* Singleton<T>::_instance = nullptr;
+template<class T> 
+T* Singleton<T>::_instance = nullptr;
 
 }
 #endif

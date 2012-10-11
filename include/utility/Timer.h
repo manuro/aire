@@ -66,6 +66,7 @@ public:
    {
       _count = 0;
       _timeSpan = 0;
+      _timeOverhead = 0;
       _isRunning = false;
    }
    
@@ -143,7 +144,7 @@ public:
    //! \return The overhead for a time single time stap request.
    double getTimeOverhead()
    {
-      if(_timeOverhead < 1e-15)
+      if(_timeOverhead == 0)
       {
          computeOverhead();
       }

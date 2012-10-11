@@ -41,9 +41,18 @@ class Watch
 public:
    //! \brief Constructor of the object.
    Watch() { }
-    
+   
+   virtual void destroy()
+   {
+      // Free all created timers
+      _timers.erase(_timers.begin(), _timers.end());
+   }
+
    //! \brief Destructor of the object.
-   virtual ~Watch() { }
+   virtual ~Watch() 
+   { 
+      destroy();
+   }
    
    //! \brief Access method for a timer.
    //! \param name The string literal containing the timer name.
@@ -76,7 +85,7 @@ public:
       
       // Calculate the total time
       double totalTime = 0;
-      for(auto it = _timers.begin(); it != _timers.end(); it++) 
+      for(auto it = _timers.begin(); it != _timers.end(); ++it) 
       {
          totalTime += it->second->getTime(isAverage);
       }
@@ -84,7 +93,7 @@ public:
              << "---" << std::endl;
       
       // Iterate over all timers and print the total time
-      for(auto it = _timers.begin(); it != _timers.end(); it++) 
+      for(auto it = _timers.begin(); it != _timers.end(); ++it) 
       {
          unsigned int respace = maxlen;
          std::string output = it->first;
