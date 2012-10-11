@@ -46,8 +46,12 @@ void addTests(aire::Test& test)
       axpyZero<TYPE, N>);
    
    // --- DET
-   test.add(std::to_string(N) + typeid(TYPE).name() + "-DET matrix ", 
-      compDet<TYPE, N>);
+   test.add(std::to_string(N) + typeid(TYPE).name() + "-DET positive ", 
+      detPositive<TYPE, N>);
+
+   // -- INV
+   test.add(std::to_string(N) + typeid(TYPE).name() + "-INV positive ", 
+      invPositive<TYPE, N>);
 }
 
 

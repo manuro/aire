@@ -27,7 +27,8 @@
 #include "Tools.h"
 
 template<class TYPE, uint32_t N>
-int32_t compDet() {
+int32_t detPositive() 
+{
    int32_t result = EXIT_SUCCESS;
    if(N <= 4 && N > 1)
    {
@@ -39,11 +40,11 @@ int32_t compDet() {
       A[idx(2,0)] =  6; A[idx(2,1)] = 13; A[idx(2,2)] = 18; A[idx(2,3)] = 0;
       A[idx(3,0)] =  0; A[idx(3,1)] =  0; A[idx(3,2)] =  0; A[idx(3,3)] = 1; 
 
-      // Scle the vector
+      // Compute the determinant
       double value = aire::det<TYPE,N>(A, aire::idx1d<4>);
 
       // Verify the result
-      if(fabs(value-5.0) > 1e-16 && !aire::isnan(value))
+      if(fabs(value-5.0) > 1e-16 || aire::isnan(value))
       {
          result = EXIT_FAILURE;
          std::cout << "Error determinant is :" << value << std::endl;
@@ -52,9 +53,12 @@ int32_t compDet() {
    else if(N == 1)
    {
       TYPE A = 2;
+
+      // Compute the determinant
       double value = aire::det<TYPE,N>(&A, aire::idx1d<1>);
+      
       // Verify the result
-      if(fabs(value-0.5) > 1e-16 && !aire::isnan(value))
+      if(fabs(value-A) > 1e-16 || aire::isnan(value))
       {
          result = EXIT_FAILURE;
          std::cout << "Error determinant is :" << value << std::endl;
@@ -65,6 +69,86 @@ int32_t compDet() {
       std::cerr << "Test case not implemented for N = " << N << std::endl;
       result = EXIT_FAILURE;
    }    
+   return result;
+}
+
+template<class TYPE, uint32_t N>
+int32_t invPositive() 
+{
+   int32_t result = EXIT_SUCCESS;
+   if(N <= 4 && N > 0)
+   {
+      std::function<uint32_t (uint32_t, uint32_t)> idx = aire::idx1d<N>;
+      
+      TYPE A[N*N];
+      TYPE B[N*N];
+
+      if(N == 4)
+      {
+         A[idx(0,0)] =  1; A[idx(0,1)] =  1; A[idx(0,2)] =  1; A[idx(0,3)] = -1;
+         A[idx(1,0)] = -2; A[idx(1,1)] =  2; A[idx(1,2)] =  1; A[idx(1,3)] =  0;
+         A[idx(2,0)] = -4; A[idx(2,1)] =  0; A[idx(2,2)] =  3; A[idx(2,3)] = -2;
+         A[idx(3,0)] = -3; A[idx(3,1)] =-11; A[idx(3,2)] =  4; A[idx(3,3)] = -5; 
+         
+         B[idx(0,0)] =  0.5; B[idx(0,1)] =  1.125; B[idx(0,2)] = -0.875; B[idx(0,3)] =  0.25;
+         B[idx(1,0)] =  0.0; B[idx(1,1)] = -0.875; B[idx(1,2)] =  0.625; B[idx(1,3)] = -0.25;
+         B[idx(2,0)] =  1.0; B[idx(2,1)] =  5.000; B[idx(2,2)] = -3.000; B[idx(2,3)] =  1.00;
+         B[idx(3,0)] =  0.5; B[idx(3,1)] =  5.250; B[idx(3,2)] = -3.250; B[idx(3,3)] =  1.00; 
+      }
+      else if(N == 3)
+      {
+         A[idx(0,0)] =  3; A[idx(0,1)] =  2; A[idx(0,2)] =  6;
+         A[idx(1,0)] =  1; A[idx(1,1)] =  1; A[idx(1,2)] =  3;
+         A[idx(2,0)] = -3; A[idx(2,1)] = -2; A[idx(2,2)] = -5;
+            
+         B[idx(0,0)] =  1; B[idx(0,1)] = -2; B[idx(0,2)] =  0;
+         B[idx(1,0)] = -4; B[idx(1,1)] =  3; B[idx(1,2)] = -3;
+         B[idx(2,0)] =  1; B[idx(2,1)] =  0; B[idx(2,2)] =  1;
+      }
+      else if(N == 2)
+      {
+         A[idx(0,0)] = 4;
+         A[idx(0,1)] = 2;
+         A[idx(1,0)] = 1;
+         A[idx(1,1)] = 3;
+         
+         B[idx(0,0)] = 0.3;
+         B[idx(0,1)] = -0.2;
+         B[idx(1,0)] = -0.1;
+         B[idx(1,1)] = 0.4;
+      }
+      else if(N == 1)
+      {
+         A[idx(0,0)] = 2;
+         B[idx(0,0)] = 0.5;
+      }
+
+      // Invert the matrix
+      aire::inv<TYPE,N>(A, aire::idx1d<N>);
+
+      // Check if the inverse is correct
+      for(uint32_t i = 0; i < N; i++)
+      {
+         for(uint32_t j = 0; j < N; j++)
+         {
+            if(fabs(A[idx(i,j)]-B[idx(i,j)]) > 1e-16 || aire::isnan(A[idx(i,j)]))
+            {
+               std::cerr << "Matrix inverse is not correct! Idx " << i << "," << j << std::endl;   
+               result = EXIT_FAILURE;
+               break;
+            }
+         }
+         if(result == EXIT_FAILURE)
+         {
+            break;
+         }
+      }
+   }
+   else
+   {
+      std::cerr << "Test case not implemented for N = " << N << std::endl;
+      result = EXIT_FAILURE;
+   }
    return result;
 }
 
