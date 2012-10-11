@@ -44,18 +44,14 @@ public:
    {
       return _outStream.str();
    }
- 
+
    //! \brief Overloads the operator in a templated way.
    //! Because of the lack of visibility for the compiler the implementation 
    //! of this function must be here.
    //! \param data Templated data to be added to the stream.
    //! \return The class itself.
-   template<class T> Stream& operator<<(const T& data)
-   {
-      _outStream << data;
-      return *this;
-   }
-
+   template<class T> Stream& operator<<(const T& data);
+ 
 private:
    //! \brief Output stream member. 
    std::ostringstream _outStream;
@@ -66,6 +62,13 @@ private:
    //! \brief Private assignment operator. 
    Stream& operator=(Stream const&);
 };
+
+
+template<class T> Stream& Stream::operator<<(const T& data)
+{
+   _outStream << data;
+   return *this;
+}
 
 }
 #endif
