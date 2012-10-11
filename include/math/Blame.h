@@ -21,10 +21,7 @@
 #include <cstdint>
 #include <cstdlib>
 #include <cstring>
-
-//! \brief Defines matrix access pattern.
-//#define A(i,j) A[((i)*(N))+(j)]
-//#define B(i,j) B[((i)*(N))+(j)]
+#include <stdexcept>
 
 //! \brief Global aire namespace.
 namespace aire 
@@ -133,9 +130,12 @@ inline TYPE det(const TYPE* A, std::function<uint32_t (uint32_t, uint32_t)> idx)
       //     | a b c |
       // A = | d e f | -> det(A) = aei + bfg + cdh - ceg - bdi - afh
       //     | g h i |
-      d = A[idx(0,0)]*A[idx(1,1)]*A[idx(2,2)] + A[idx(0,1)]*A[idx(1,2)]*A[idx(2,0)] 
-        + A[idx(0,2)]*A[idx(1,0)]*A[idx(2,1)] - A[idx(0,2)]*A[idx(1,1)]*A[idx(2,0)] 
-        - A[idx(0,1)]*A[idx(1,0)]*A[idx(2,2)] - A[idx(0,0)]*A[idx(1,2)]*A[idx(2,1)];
+      d = A[idx(0,0)]*A[idx(1,1)]*A[idx(2,2)] 
+        + A[idx(0,1)]*A[idx(1,2)]*A[idx(2,0)] 
+        + A[idx(0,2)]*A[idx(1,0)]*A[idx(2,1)] 
+        - A[idx(0,2)]*A[idx(1,1)]*A[idx(2,0)] 
+        - A[idx(0,1)]*A[idx(1,0)]*A[idx(2,2)] 
+        - A[idx(0,0)]*A[idx(1,2)]*A[idx(2,1)];
    }
    else if(N == 2)
    {
@@ -152,168 +152,168 @@ inline TYPE det(const TYPE* A, std::function<uint32_t (uint32_t, uint32_t)> idx)
 }
 
 //! \brief Computes the inverse of the matrix.
+//! \param A Matrix of size (NxN).
 //! \param idx Function to index the matrix. 
-//! \return EXIT_SUCCESS if the inverse could be computed. Otherwise EXIT_FAILURE.
+//! \throw std::logic_error If det(A) < 1e-15
 template<class TYPE, uint32_t N>
-inline int32_t inv(TYPE* A, std::function<uint32_t (uint32_t,uint32_t)> idx)
+inline void inv(TYPE* A, std::function<uint32_t (uint32_t,uint32_t)> idx) 
+throw(std::logic_error)
 {
-   int32_t result = EXIT_SUCCESS;
    TYPE d = det<TYPE,N>(A, idx);
-   if(fabs(d-0) > 1e-16)
+
+   if(fabs(d-0) < 1e-15)
    {
-      TYPE r = 1 / d;
-      TYPE B[N*N];
-      if(N == 4)
-      {
-         B[idx(0,0)] = A[idx(1,1)]*A[idx(2,2)]*A[idx(3,3)] 
-                     + A[idx(1,2)]*A[idx(2,3)]*A[idx(3,1)] 
-                     + A[idx(1,3)]*A[idx(2,1)]*A[idx(3,2)] 
-                     - A[idx(1,1)]*A[idx(2,3)]*A[idx(3,2)]
-                     - A[idx(1,2)]*A[idx(2,1)]*A[idx(3,3)] 
-                     - A[idx(1,3)]*A[idx(2,2)]*A[idx(3,1)];
-
-         B[idx(0,1)] = A[idx(0,1)]*A[idx(2,3)]*A[idx(3,2)] 
-                     + A[idx(0,2)]*A[idx(2,1)]*A[idx(3,3)] 
-                     + A[idx(0,3)]*A[idx(2,2)]*A[idx(3,1)] 
-                     - A[idx(0,1)]*A[idx(2,2)]*A[idx(3,3)] 
-                     - A[idx(0,2)]*A[idx(2,3)]*A[idx(3,1)] 
-                     - A[idx(0,3)]*A[idx(2,1)]*A[idx(3,2)];
-           
-         B[idx(0,2)] = A[idx(0,1)]*A[idx(1,2)]*A[idx(3,3)] 
-                     + A[idx(0,2)]*A[idx(1,3)]*A[idx(3,1)] 
-                     + A[idx(0,3)]*A[idx(1,1)]*A[idx(3,2)] 
-                     - A[idx(0,1)]*A[idx(1,3)]*A[idx(3,2)] 
-                     - A[idx(0,2)]*A[idx(1,1)]*A[idx(3,3)] 
-                     - A[idx(0,3)]*A[idx(1,2)]*A[idx(3,1)];
-
-         B[idx(0,3)] = A[idx(0,1)]*A[idx(1,3)]*A[idx(2,2)] 
-                     + A[idx(0,2)]*A[idx(1,1)]*A[idx(2,3)] 
-                     + A[idx(0,3)]*A[idx(1,2)]*A[idx(2,1)]
-                     - A[idx(0,1)]*A[idx(1,2)]*A[idx(2,3)]
-                     - A[idx(0,2)]*A[idx(1,3)]*A[idx(2,1)] 
-                     - A[idx(0,3)]*A[idx(1,1)]*A[idx(2,2)];
-   // --------------------------------------------------------------------------  
-         B[idx(1,0)] = A[idx(1,0)]*A[idx(2,3)]*A[idx(3,2)] 
-                     + A[idx(1,2)]*A[idx(2,0)]*A[idx(3,3)] 
-                     + A[idx(1,3)]*A[idx(2,2)]*A[idx(3,0)]
-                     - A[idx(1,0)]*A[idx(2,2)]*A[idx(3,3)] 
-                     - A[idx(1,2)]*A[idx(2,3)]*A[idx(3,0)] 
-                     - A[idx(1,3)]*A[idx(2,0)]*A[idx(3,2)];
-
-         B[idx(1,1)] = A[idx(0,0)]*A[idx(2,2)]*A[idx(3,3)] 
-                     + A[idx(0,2)]*A[idx(2,3)]*A[idx(3,0)] 
-                     + A[idx(0,3)]*A[idx(2,0)]*A[idx(3,2)]
-                     - A[idx(0,0)]*A[idx(2,3)]*A[idx(3,2)] 
-                     - A[idx(0,2)]*A[idx(2,0)]*A[idx(3,3)] 
-                     - A[idx(0,3)]*A[idx(2,2)]*A[idx(3,0)];
-           
-         B[idx(1,2)] = A[idx(0,0)]*A[idx(1,3)]*A[idx(3,2)] 
-                     + A[idx(0,2)]*A[idx(1,0)]*A[idx(3,3)] 
-                     + A[idx(0,3)]*A[idx(1,2)]*A[idx(3,0)]
-                     - A[idx(0,0)]*A[idx(1,2)]*A[idx(3,3)] 
-                     - A[idx(0,2)]*A[idx(1,3)]*A[idx(3,0)] 
-                     - A[idx(0,3)]*A[idx(1,0)]*A[idx(3,2)];
-
-         B[idx(1,3)] = A[idx(0,0)]*A[idx(1,2)]*A[idx(2,3)] 
-                     + A[idx(0,2)]*A[idx(1,3)]*A[idx(2,0)] 
-                     + A[idx(0,3)]*A[idx(1,0)]*A[idx(2,2)]
-                     - A[idx(0,0)]*A[idx(1,3)]*A[idx(2,2)] 
-                     - A[idx(0,2)]*A[idx(1,0)]*A[idx(2,3)] 
-                     - A[idx(0,3)]*A[idx(1,2)]*A[idx(2,0)];
-   // --------------------------------------------------------------------------
-         B[idx(2,0)] = A[idx(1,0)]*A[idx(2,1)]*A[idx(3,3)] 
-                     + A[idx(1,1)]*A[idx(2,3)]*A[idx(3,0)] 
-                     + A[idx(1,3)]*A[idx(2,0)]*A[idx(3,1)]
-                     - A[idx(1,0)]*A[idx(2,3)]*A[idx(3,1)] 
-                     - A[idx(1,1)]*A[idx(2,0)]*A[idx(3,3)] 
-                     - A[idx(1,3)]*A[idx(2,1)]*A[idx(3,0)];
-
-         B[idx(2,1)] = A[idx(0,0)]*A[idx(2,3)]*A[idx(3,1)] 
-                     + A[idx(0,1)]*A[idx(2,0)]*A[idx(3,3)] 
-                     + A[idx(0,3)]*A[idx(2,1)]*A[idx(3,0)]
-                     - A[idx(0,0)]*A[idx(2,1)]*A[idx(3,3)] 
-                     - A[idx(0,1)]*A[idx(2,3)]*A[idx(3,0)] 
-                     - A[idx(0,3)]*A[idx(2,0)]*A[idx(3,1)];
-           
-         B[idx(2,2)] = A[idx(0,0)]*A[idx(1,1)]*A[idx(3,3)] 
-                     + A[idx(0,1)]*A[idx(1,3)]*A[idx(3,0)] 
-                     + A[idx(0,3)]*A[idx(1,0)]*A[idx(3,1)]
-                     - A[idx(0,0)]*A[idx(1,3)]*A[idx(3,1)] 
-                     - A[idx(0,1)]*A[idx(1,0)]*A[idx(3,3)] 
-                     - A[idx(0,3)]*A[idx(1,1)]*A[idx(3,0)];
-
-         B[idx(2,3)] = A[idx(0,0)]*A[idx(1,3)]*A[idx(2,1)] 
-                     + A[idx(0,1)]*A[idx(1,0)]*A[idx(2,3)] 
-                     + A[idx(0,3)]*A[idx(1,1)]*A[idx(2,0)]
-                     - A[idx(0,0)]*A[idx(1,1)]*A[idx(2,3)] 
-                     - A[idx(0,1)]*A[idx(1,3)]*A[idx(2,0)] 
-                     - A[idx(0,3)]*A[idx(1,0)]*A[idx(2,1)];
-   // --------------------------------------------------------------------------
-         B[idx(3,0)] = A[idx(1,0)]*A[idx(2,2)]*A[idx(3,1)] 
-                     + A[idx(1,1)]*A[idx(2,0)]*A[idx(3,2)] 
-                     + A[idx(1,2)]*A[idx(2,1)]*A[idx(3,0)]
-                     - A[idx(1,0)]*A[idx(2,1)]*A[idx(3,2)] 
-                     - A[idx(1,1)]*A[idx(2,2)]*A[idx(3,0)] 
-                     - A[idx(1,2)]*A[idx(2,0)]*A[idx(3,1)];
-
-         B[idx(3,1)] = A[idx(0,0)]*A[idx(2,1)]*A[idx(3,2)] 
-                     + A[idx(0,1)]*A[idx(2,2)]*A[idx(3,0)] 
-                     + A[idx(0,2)]*A[idx(2,0)]*A[idx(3,1)]
-                     - A[idx(0,0)]*A[idx(2,2)]*A[idx(3,1)] 
-                     - A[idx(0,1)]*A[idx(2,0)]*A[idx(3,2)] 
-                     - A[idx(0,2)]*A[idx(2,1)]*A[idx(3,0)];
-           
-         B[idx(3,2)] = A[idx(0,0)]*A[idx(1,2)]*A[idx(3,1)] 
-                     + A[idx(0,1)]*A[idx(1,0)]*A[idx(3,2)] 
-                     + A[idx(0,2)]*A[idx(1,1)]*A[idx(3,0)]
-                     - A[idx(0,0)]*A[idx(1,1)]*A[idx(3,2)] 
-                     - A[idx(0,1)]*A[idx(1,2)]*A[idx(3,0)] 
-                     - A[idx(0,2)]*A[idx(1,0)]*A[idx(3,1)];
-
-         B[idx(3,3)] = A[idx(0,0)]*A[idx(1,1)]*A[idx(2,2)] 
-                     + A[idx(0,1)]*A[idx(1,2)]*A[idx(2,0)] 
-                     + A[idx(0,2)]*A[idx(1,0)]*A[idx(2,1)]
-                     - A[idx(0,0)]*A[idx(1,2)]*A[idx(2,1)] 
-                     - A[idx(0,1)]*A[idx(1,0)]*A[idx(2,2)] 
-                     - A[idx(0,2)]*A[idx(1,1)]*A[idx(2,0)];
-
-         for(int i = 0; i < 16; i++) 
-         {
-            B[i] *= r;
-         }
-      }
-      else if(N == 3)
-      {
-         B[idx(0,0)] = r * (A[idx(1,1)]*A[idx(2,2)] - A[idx(1,2)]*A[idx(2,1)]);
-         B[idx(0,1)] = r * (A[idx(0,2)]*A[idx(2,1)] - A[idx(0,1)]*A[idx(2,2)]);
-         B[idx(0,2)] = r * (A[idx(0,1)]*A[idx(1,2)] - A[idx(0,2)]*A[idx(1,1)]);
-         B[idx(1,0)] = r * (A[idx(1,2)]*A[idx(2,0)] - A[idx(1,0)]*A[idx(2,2)]);
-         B[idx(1,1)] = r * (A[idx(0,0)]*A[idx(2,2)] - A[idx(0,2)]*A[idx(2,0)]);
-         B[idx(1,2)] = r * (A[idx(0,2)]*A[idx(1,0)] - A[idx(0,0)]*A[idx(1,2)]);
-         B[idx(2,0)] = r * (A[idx(1,0)]*A[idx(2,1)] - A[idx(1,1)]*A[idx(2,0)]);
-         B[idx(2,1)] = r * (A[idx(0,1)]*A[idx(2,0)] - A[idx(0,0)]*A[idx(2,1)]);
-         B[idx(2,2)] = r * (A[idx(0,0)]*A[idx(1,1)] - A[idx(0,1)]*A[idx(1,0)]);
-      }
-      else if(N == 2)
-      {
-         B[idx(0,0)] = r * A[idx(1,1)];
-         B[idx(0,1)] = r * A[idx(0,1)] * (-1);
-         B[idx(1,0)] = r * A[idx(1,0)] * (-1);
-         B[idx(1,1)] = r * A[idx(0,0)];
-      }
-      else if(N == 1) 
-      {
-         B[idx(0,0)] = r;
-      }
-      memcpy(A, B, N*N*sizeof(TYPE));
-      result = 0;
+      throw std::logic_error("Det is too small! Was " + std::to_string(d));
    }
-   else
+
+   TYPE r = 1 / d;
+   TYPE B[N*N];
+   
+   if(N == 4)
    {
-      std::cerr << "Determinat too small. Was d = " << d << std::endl;
-      result = EXIT_FAILURE;
+      B[idx(0,0)] = A[idx(1,1)]*A[idx(2,2)]*A[idx(3,3)] 
+                  + A[idx(1,2)]*A[idx(2,3)]*A[idx(3,1)] 
+                  + A[idx(1,3)]*A[idx(2,1)]*A[idx(3,2)] 
+                  - A[idx(1,1)]*A[idx(2,3)]*A[idx(3,2)]
+                  - A[idx(1,2)]*A[idx(2,1)]*A[idx(3,3)] 
+                  - A[idx(1,3)]*A[idx(2,2)]*A[idx(3,1)];
+
+      B[idx(0,1)] = A[idx(0,1)]*A[idx(2,3)]*A[idx(3,2)] 
+                  + A[idx(0,2)]*A[idx(2,1)]*A[idx(3,3)] 
+                  + A[idx(0,3)]*A[idx(2,2)]*A[idx(3,1)] 
+                  - A[idx(0,1)]*A[idx(2,2)]*A[idx(3,3)] 
+                  - A[idx(0,2)]*A[idx(2,3)]*A[idx(3,1)] 
+                  - A[idx(0,3)]*A[idx(2,1)]*A[idx(3,2)];
+        
+      B[idx(0,2)] = A[idx(0,1)]*A[idx(1,2)]*A[idx(3,3)] 
+                  + A[idx(0,2)]*A[idx(1,3)]*A[idx(3,1)] 
+                  + A[idx(0,3)]*A[idx(1,1)]*A[idx(3,2)] 
+                  - A[idx(0,1)]*A[idx(1,3)]*A[idx(3,2)] 
+                  - A[idx(0,2)]*A[idx(1,1)]*A[idx(3,3)] 
+                  - A[idx(0,3)]*A[idx(1,2)]*A[idx(3,1)];
+
+      B[idx(0,3)] = A[idx(0,1)]*A[idx(1,3)]*A[idx(2,2)] 
+                  + A[idx(0,2)]*A[idx(1,1)]*A[idx(2,3)] 
+                  + A[idx(0,3)]*A[idx(1,2)]*A[idx(2,1)]
+                  - A[idx(0,1)]*A[idx(1,2)]*A[idx(2,3)]
+                  - A[idx(0,2)]*A[idx(1,3)]*A[idx(2,1)] 
+                  - A[idx(0,3)]*A[idx(1,1)]*A[idx(2,2)];
+// --------------------------------------------------------------------------  
+      B[idx(1,0)] = A[idx(1,0)]*A[idx(2,3)]*A[idx(3,2)] 
+                  + A[idx(1,2)]*A[idx(2,0)]*A[idx(3,3)] 
+                  + A[idx(1,3)]*A[idx(2,2)]*A[idx(3,0)]
+                  - A[idx(1,0)]*A[idx(2,2)]*A[idx(3,3)] 
+                  - A[idx(1,2)]*A[idx(2,3)]*A[idx(3,0)] 
+                  - A[idx(1,3)]*A[idx(2,0)]*A[idx(3,2)];
+
+      B[idx(1,1)] = A[idx(0,0)]*A[idx(2,2)]*A[idx(3,3)] 
+                  + A[idx(0,2)]*A[idx(2,3)]*A[idx(3,0)] 
+                  + A[idx(0,3)]*A[idx(2,0)]*A[idx(3,2)]
+                  - A[idx(0,0)]*A[idx(2,3)]*A[idx(3,2)] 
+                  - A[idx(0,2)]*A[idx(2,0)]*A[idx(3,3)] 
+                  - A[idx(0,3)]*A[idx(2,2)]*A[idx(3,0)];
+        
+      B[idx(1,2)] = A[idx(0,0)]*A[idx(1,3)]*A[idx(3,2)] 
+                  + A[idx(0,2)]*A[idx(1,0)]*A[idx(3,3)] 
+                  + A[idx(0,3)]*A[idx(1,2)]*A[idx(3,0)]
+                  - A[idx(0,0)]*A[idx(1,2)]*A[idx(3,3)] 
+                  - A[idx(0,2)]*A[idx(1,3)]*A[idx(3,0)] 
+                  - A[idx(0,3)]*A[idx(1,0)]*A[idx(3,2)];
+
+      B[idx(1,3)] = A[idx(0,0)]*A[idx(1,2)]*A[idx(2,3)] 
+                  + A[idx(0,2)]*A[idx(1,3)]*A[idx(2,0)] 
+                  + A[idx(0,3)]*A[idx(1,0)]*A[idx(2,2)]
+                  - A[idx(0,0)]*A[idx(1,3)]*A[idx(2,2)] 
+                  - A[idx(0,2)]*A[idx(1,0)]*A[idx(2,3)] 
+                  - A[idx(0,3)]*A[idx(1,2)]*A[idx(2,0)];
+// --------------------------------------------------------------------------
+      B[idx(2,0)] = A[idx(1,0)]*A[idx(2,1)]*A[idx(3,3)] 
+                  + A[idx(1,1)]*A[idx(2,3)]*A[idx(3,0)] 
+                  + A[idx(1,3)]*A[idx(2,0)]*A[idx(3,1)]
+                  - A[idx(1,0)]*A[idx(2,3)]*A[idx(3,1)] 
+                  - A[idx(1,1)]*A[idx(2,0)]*A[idx(3,3)] 
+                  - A[idx(1,3)]*A[idx(2,1)]*A[idx(3,0)];
+
+      B[idx(2,1)] = A[idx(0,0)]*A[idx(2,3)]*A[idx(3,1)] 
+                  + A[idx(0,1)]*A[idx(2,0)]*A[idx(3,3)] 
+                  + A[idx(0,3)]*A[idx(2,1)]*A[idx(3,0)]
+                  - A[idx(0,0)]*A[idx(2,1)]*A[idx(3,3)] 
+                  - A[idx(0,1)]*A[idx(2,3)]*A[idx(3,0)] 
+                  - A[idx(0,3)]*A[idx(2,0)]*A[idx(3,1)];
+        
+      B[idx(2,2)] = A[idx(0,0)]*A[idx(1,1)]*A[idx(3,3)] 
+                  + A[idx(0,1)]*A[idx(1,3)]*A[idx(3,0)] 
+                  + A[idx(0,3)]*A[idx(1,0)]*A[idx(3,1)]
+                  - A[idx(0,0)]*A[idx(1,3)]*A[idx(3,1)] 
+                  - A[idx(0,1)]*A[idx(1,0)]*A[idx(3,3)] 
+                  - A[idx(0,3)]*A[idx(1,1)]*A[idx(3,0)];
+
+      B[idx(2,3)] = A[idx(0,0)]*A[idx(1,3)]*A[idx(2,1)] 
+                  + A[idx(0,1)]*A[idx(1,0)]*A[idx(2,3)] 
+                  + A[idx(0,3)]*A[idx(1,1)]*A[idx(2,0)]
+                  - A[idx(0,0)]*A[idx(1,1)]*A[idx(2,3)] 
+                  - A[idx(0,1)]*A[idx(1,3)]*A[idx(2,0)] 
+                  - A[idx(0,3)]*A[idx(1,0)]*A[idx(2,1)];
+// --------------------------------------------------------------------------
+      B[idx(3,0)] = A[idx(1,0)]*A[idx(2,2)]*A[idx(3,1)] 
+                  + A[idx(1,1)]*A[idx(2,0)]*A[idx(3,2)] 
+                  + A[idx(1,2)]*A[idx(2,1)]*A[idx(3,0)]
+                  - A[idx(1,0)]*A[idx(2,1)]*A[idx(3,2)] 
+                  - A[idx(1,1)]*A[idx(2,2)]*A[idx(3,0)] 
+                  - A[idx(1,2)]*A[idx(2,0)]*A[idx(3,1)];
+
+      B[idx(3,1)] = A[idx(0,0)]*A[idx(2,1)]*A[idx(3,2)] 
+                  + A[idx(0,1)]*A[idx(2,2)]*A[idx(3,0)] 
+                  + A[idx(0,2)]*A[idx(2,0)]*A[idx(3,1)]
+                  - A[idx(0,0)]*A[idx(2,2)]*A[idx(3,1)] 
+                  - A[idx(0,1)]*A[idx(2,0)]*A[idx(3,2)] 
+                  - A[idx(0,2)]*A[idx(2,1)]*A[idx(3,0)];
+        
+      B[idx(3,2)] = A[idx(0,0)]*A[idx(1,2)]*A[idx(3,1)] 
+                  + A[idx(0,1)]*A[idx(1,0)]*A[idx(3,2)] 
+                  + A[idx(0,2)]*A[idx(1,1)]*A[idx(3,0)]
+                  - A[idx(0,0)]*A[idx(1,1)]*A[idx(3,2)] 
+                  - A[idx(0,1)]*A[idx(1,2)]*A[idx(3,0)] 
+                  - A[idx(0,2)]*A[idx(1,0)]*A[idx(3,1)];
+
+      B[idx(3,3)] = A[idx(0,0)]*A[idx(1,1)]*A[idx(2,2)] 
+                  + A[idx(0,1)]*A[idx(1,2)]*A[idx(2,0)] 
+                  + A[idx(0,2)]*A[idx(1,0)]*A[idx(2,1)]
+                  - A[idx(0,0)]*A[idx(1,2)]*A[idx(2,1)] 
+                  - A[idx(0,1)]*A[idx(1,0)]*A[idx(2,2)] 
+                  - A[idx(0,2)]*A[idx(1,1)]*A[idx(2,0)];
+
+      for(int i = 0; i < 16; i++) 
+      {
+         B[i] *= r;
+      }
    }
-   return result;
+   else if(N == 3)
+   {
+      B[idx(0,0)] = r * (A[idx(1,1)]*A[idx(2,2)] - A[idx(1,2)]*A[idx(2,1)]);
+      B[idx(0,1)] = r * (A[idx(0,2)]*A[idx(2,1)] - A[idx(0,1)]*A[idx(2,2)]);
+      B[idx(0,2)] = r * (A[idx(0,1)]*A[idx(1,2)] - A[idx(0,2)]*A[idx(1,1)]);
+      B[idx(1,0)] = r * (A[idx(1,2)]*A[idx(2,0)] - A[idx(1,0)]*A[idx(2,2)]);
+      B[idx(1,1)] = r * (A[idx(0,0)]*A[idx(2,2)] - A[idx(0,2)]*A[idx(2,0)]);
+      B[idx(1,2)] = r * (A[idx(0,2)]*A[idx(1,0)] - A[idx(0,0)]*A[idx(1,2)]);
+      B[idx(2,0)] = r * (A[idx(1,0)]*A[idx(2,1)] - A[idx(1,1)]*A[idx(2,0)]);
+      B[idx(2,1)] = r * (A[idx(0,1)]*A[idx(2,0)] - A[idx(0,0)]*A[idx(2,1)]);
+      B[idx(2,2)] = r * (A[idx(0,0)]*A[idx(1,1)] - A[idx(0,1)]*A[idx(1,0)]);
+   }
+   else if(N == 2)
+   {
+      B[idx(0,0)] = r * A[idx(1,1)];
+      B[idx(0,1)] = r * A[idx(0,1)] * (-1);
+      B[idx(1,0)] = r * A[idx(1,0)] * (-1);
+      B[idx(1,1)] = r * A[idx(0,0)];
+   }
+   else if(N == 1) 
+   {
+      B[idx(0,0)] = r;
+   }
+
+   // Copy the inverse
+   std::memcpy(A, B, N*N*sizeof(TYPE));
 }
 
 }

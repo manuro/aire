@@ -18,6 +18,8 @@
 #define SINGLETON_H
 
 #include <cassert>
+#include <new>
+#include <cstdlib>
 
 #include "Guard.h"
 
@@ -42,7 +44,15 @@ public:
       Guard lock;
       if(_instance == nullptr) 
       {
-         _instance = new T;
+         try
+         {
+            _instance = new T;
+         }
+         catch(std::bad_alloc& e)
+         {
+            std::cerr << "Could not allocate singleton instance." << std::endl;
+            exit(EXIT_FAILURE);
+         }
       }
       assert(_instance != nullptr);
       return _instance;
