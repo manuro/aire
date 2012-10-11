@@ -68,6 +68,9 @@ public:
       _timeSpan = 0;
       _timeOverhead = 0;
       _isRunning = false;
+      #if defined(_WIN32) || defined(_WIN64) || defined(_WINDOWS)
+      _startTime = 0;
+      #endif
    }
    
    //! \brief Starts the timer.
