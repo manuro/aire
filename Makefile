@@ -34,11 +34,17 @@ BIN_DIR   = bin
 OBJ_DIR   = obj
 INC_DIR   = ./include/utility ./include/math
 
-#Test cases
+# Test cases
 TEST_SRC  = $(notdir $(wildcard test/*.cpp))
 TEST_OBJ  = $(addprefix $(OBJ_DIR)/,$(TEST_SRC:.cpp=.o))
 TEST_EXE  = $(TEST_SRC:.cpp=)
 TEST_BIN  = $(addprefix $(BIN_DIR)/,$(TEST_EXE))
+
+# Example cases
+EXAM_SRC  = $(notdir $(wildcard example/*.cpp))
+EXAM_OBJ  = $(addprefix $(OBJ_DIR)/,$(EXAM_SRC:.cpp=.o))
+EXAM_EXE  = $(EXAM_SRC:.cpp=)
+EXAM_BIN  = $(addprefix $(BIN_DIR)/,$(EXAM_EXE))
 
 # Compiler
 CPP      += $(CPP_FLAGS)
@@ -47,7 +53,7 @@ CPP_INCS += $(addprefix -I,$(INC_DIR))
 # Build rules
 .PHONY: setup clean all
 
-all: setup $(TEST_BIN)
+all: setup $(TEST_BIN) $(EXAM_BIN)
 
 test: setup all $(TEST_EXE)
 
@@ -58,7 +64,10 @@ OBJS = $(TEST_OBJ)
 $(OBJ_DIR)/%.o: test/%.cpp 
 	$(CPP) -MMD -c -o $@ $< $(CPP_INCS)  
 
-define test_template
+$(OBJ_DIR)/%.o: example/%.cpp 
+	$(CPP) -MMD -c -o $@ $< $(CPP_INCS)  
+
+define template
 $(1): setup $$(addprefix $$(BIN_DIR)/,$(1))
 	@mkdir -p $(BIN_DIR)/logs
 	@cd $(BIN_DIR) && ./$(1) 2>&1 > logs/$(1).txt
@@ -67,7 +76,8 @@ $(BIN_DIR)/$(1): $$(addprefix $$(OBJ_DIR)/,$$(addsuffix .o,$(1)))
 	$(CPP) -o $$@ $$^ $(CPP_INCS) $(CPP_LIBS)
 endef
 
-$(foreach t,$(TEST_EXE),$(eval $(call test_template,$(t))))
+$(foreach t,$(TEST_EXE),$(eval $(call template,$(t))))
+$(foreach t,$(EXAM_EXE),$(eval $(call template,$(t))))
 
 dox:
 	$(DOX) Doxyfile.dox
