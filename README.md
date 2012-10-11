@@ -130,6 +130,7 @@ The design of a class uses the following template:
 * Member names should be in lowerCamelCase and always begin with an underscore. 
   For example: `_className`, `_currentStep` or `_numProcs`.
 * Restrict member names to maximal 16 characters.
+* Array type members should be named in plural e.g. `_messages`.
 
 #### Constants
 

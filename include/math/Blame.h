@@ -13,7 +13,7 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 //
 //! \file Blame.h
-//! \brief Basic Linear Algebra Methods Ensemble. 
+//! \brief Basic Linear Algebra Method Ensemble. 
 #ifndef BLAME_H
 #define BLAME_H
 
@@ -21,11 +21,42 @@
 #include <cstdint>
 #include <cstdlib>
 #include <cstring>
+#include <cmath>
 #include <stdexcept>
 
 //! \brief Global aire namespace.
-namespace aire 
+namespace aire
 {
+
+//! \brief Norm of a vector.
+//! \param x Vector with N elements.
+//! \return The computed euclidian norm.
+//!
+//! This function computes: ||x|| = sqrt(<x,x>) with vector x.
+template<class TYPE, uint32_t N>
+inline TYPE norm(TYPE* x)
+{
+   TYPE result = 0;
+   result = sqrt(dot(x));
+   return result;
+}
+
+//! \brief Dot product of a vector.
+//! \param x Vector with N elements.
+//! \param y Vector with N elements.
+//! \return The computed dot product.
+//!
+//! This function computes: <x,y> = x * y with vectors x and y.
+template<class TYPE, uint32_t N>
+inline TYPE dot(TYPE* x, TYPE* y)
+{
+   TYPE result = 0;
+   for(uint32_t i = 0; i < N; i++)
+   {
+      result += x[i] * y[i];
+   }  
+   return result;
+}
 
 //! \brief Scales a vector.
 //! \param a The scalar for the multiplication with x.
@@ -313,7 +344,7 @@ throw(std::logic_error)
    }
 
    // Copy the inverse
-   std::memcpy(A, B, N*N*sizeof(TYPE));
+   memcpy(A, B, N*N*sizeof(TYPE));
 }
 
 }
