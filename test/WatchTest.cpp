@@ -19,6 +19,7 @@
 #define ISNAN(a) ((a) != (a)) 
 
 #include <cstdlib>
+#include <unistd.h>
 
 #include "Test.h"
 #include "Timer.h"

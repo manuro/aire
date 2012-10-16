@@ -30,7 +30,7 @@ CPP_FLAGS = -O3 -Wall -DNDEBUG -std=c++0x
 endif
 
 # Define C/C++ compiler 
-CPP       = g++-4.6.2
+CPP       = g++-4.8
 
 # Doxygen executable
 DOX       = doxygen
