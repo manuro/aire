@@ -28,8 +28,8 @@ int32_t axpyPositive() {
    int32_t result = EXIT_SUCCESS;
    TYPE x[N];
    TYPE y[N];
-   TYPE alpha = 3.14;
-   TYPE value = 7.28;
+   TYPE alpha = (TYPE)3.14;
+   TYPE value = (TYPE)7.28;
    
    // Initialize the vector
    for(uint32_t i = 0; i < N; i++)
@@ -167,8 +167,8 @@ template<class TYPE, uint32_t N>
 int32_t scalPositive() {
    int32_t result = EXIT_SUCCESS;
    TYPE x[N];
-   TYPE alpha = 3.14;
-   TYPE value = 6.28;
+   TYPE alpha = (TYPE)3.14;
+   TYPE value = (TYPE)6.28;
    
    // Initialize the vector
    for(uint32_t i = 0; i < N; i++)
@@ -200,8 +200,8 @@ template<class TYPE, uint32_t N>
 int32_t scalNegative() {
    int32_t result = EXIT_SUCCESS;
    TYPE x[N];
-   TYPE alpha = -3.14;
-   TYPE value = -6.28;
+   TYPE alpha = (TYPE)-3.14;
+   TYPE value = (TYPE)-6.28;
    
    // Initialize the vector
    for(uint32_t i = 0; i < N; i++)

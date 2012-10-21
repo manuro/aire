@@ -188,13 +188,13 @@ inline TYPE det(const TYPE* A, std::function<uint32_t (uint32_t, uint32_t)> idx)
 //! \throw std::logic_error If det(A) < 1e-15
 template<class TYPE, uint32_t N>
 inline void inv(TYPE* A, std::function<uint32_t (uint32_t,uint32_t)> idx) 
-throw(std::logic_error)
+throw(...)
 {
    TYPE d = det<TYPE,N>(A, idx);
 
    if(fabs(d-0) < 1e-15)
    {
-      throw std::logic_error("Det is too small! Was " + std::to_string(d));
+      throw std::logic_error("Det is too small!");
    }
 
    TYPE r = 1 / d;

@@ -26,6 +26,8 @@
 #include <windows.h>
 #endif
 
+#include <cstdint>
+
 //! \brief Global aire namespace.
 namespace aire {
 

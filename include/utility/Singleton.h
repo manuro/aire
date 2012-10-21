@@ -51,7 +51,7 @@ public:
          }
          catch(std::bad_alloc& e)
          {
-            std::cerr << "Could not allocate singleton instance." << std::endl;
+			   std::cerr << "Could not allocate singleton instance. " << e.what() << std::endl;
             exit(EXIT_FAILURE);
          }
       }

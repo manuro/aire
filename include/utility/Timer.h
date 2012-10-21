@@ -20,6 +20,8 @@
 #if defined(__linux__) || defined(__APPLE__)
 #include <time.h> 
 #include <sys/time.h>
+#elif defined(WIN32) || defined(WIN64) || defined(WINDOWS)
+#include <windows.h>
 #endif
 
 #if defined(__linux__) || defined(__APPLE__)

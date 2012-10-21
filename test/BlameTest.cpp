@@ -21,36 +21,46 @@
 #include "BlameMatrix.h"
 
 #include <cstdint>
+#include <sstream>
+#include <string>
+
+template<typename T>
+std::string toString(const T& value)
+{
+    std::ostringstream oss;
+    oss << value;
+    return oss.str();
+}
 
 template<typename TYPE, uint32_t N>
 void addTests(aire::Test& test)
 {
    // --- SCAL
-   test.add(std::to_string(N) + typeid(TYPE).name() + "-SCAL positive ", 
+   test.add(toString<uint32_t>(N) + typeid(TYPE).name() + "-SCAL positive ", 
       scalPositive<TYPE, N>);
-   test.add(std::to_string(N) + typeid(TYPE).name() + "-SCAL negative ",
+   test.add(toString<uint32_t>(N) + typeid(TYPE).name() + "-SCAL negative ",
       scalNegative<TYPE, N>);
-   test.add(std::to_string(N) + typeid(TYPE).name() + "-SCAL neutral ", 
+   test.add(toString<uint32_t>(N) + typeid(TYPE).name() + "-SCAL neutral ", 
       scalNeutral<TYPE, N>);
-   test.add(std::to_string(N) + typeid(TYPE).name() + "-SCAL inverse ", 
+   test.add(toString<uint32_t>(N) + typeid(TYPE).name() + "-SCAL inverse ", 
       scalInverse<TYPE, N>);
 
    // --- AXPY
-   test.add(std::to_string(N) + typeid(TYPE).name() + "-AXPY positive ",
+   test.add(toString<uint32_t>(N) + typeid(TYPE).name() + "-AXPY positive ",
       axpyPositive<TYPE, N>);
-   test.add(std::to_string(N) + typeid(TYPE).name() + "-AXPY negative ",
+   test.add(toString<uint32_t>(N) + typeid(TYPE).name() + "-AXPY negative ",
       axpyNegative<TYPE, N>);
-   test.add(std::to_string(N) + typeid(TYPE).name() + "-AXPY neutral ", 
+   test.add(toString<uint32_t>(N) + typeid(TYPE).name() + "-AXPY neutral ", 
       axpyNeutral<TYPE, N>);
-   test.add(std::to_string(N) + typeid(TYPE).name() + "-AXPY zero ", 
+   test.add(toString<uint32_t>(N) + typeid(TYPE).name() + "-AXPY zero ", 
       axpyZero<TYPE, N>);
    
    // --- DET
-   test.add(std::to_string(N) + typeid(TYPE).name() + "-DET positive ", 
+   test.add(toString<uint32_t>(N) + typeid(TYPE).name() + "-DET positive ", 
       detPositive<TYPE, N>);
 
    // -- INV
-   test.add(std::to_string(N) + typeid(TYPE).name() + "-INV positive ", 
+   test.add(toString<uint32_t>(N) + typeid(TYPE).name() + "-INV positive ", 
       invPositive<TYPE, N>);
 }
 

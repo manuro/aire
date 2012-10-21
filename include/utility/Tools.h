@@ -53,16 +53,5 @@ inline uint32_t idx1d(uint32_t x, uint32_t y, uint32_t z)
    return x * dx * dy + y * dx + z;
 }
 
-//! \brief Swaps a and b without temporary space.
-//! \param a Refernece to a
-//! \param b Reference to b
-inline void swap(int32_t& __restrict a, int32_t& __restrict b)
-{
-   assert(&a != &b);
-   a ^= b;
-   b ^= a;
-   a ^= b;
-}
-
 }
 #endif

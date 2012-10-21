@@ -96,7 +96,7 @@ public:
       //return (unsigned long)syscall( __NR_gettid );
       return (unsigned long)pthread_self();
       #elif defined(WIN32) || defined(WIN64) || defined(WINDOWS)
-      return (unsigned long)GetCurrentThreadId(void);
+      return (unsigned long)GetCurrentThreadId();
       #endif   
    }
    

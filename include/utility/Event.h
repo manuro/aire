@@ -55,7 +55,7 @@ public:
       pthread_cond_init(&_condition, 0);
       _signaled = false;
       #elif defined(WIN32) || defined(WIN64) || defined(WINDOWS)
-      handle = CreateEvent(NULL, true, false, NULL); 
+      _handle = CreateEvent(NULL, true, false, NULL); 
       #endif 
    }
    
@@ -90,7 +90,7 @@ public:
       }
       pthread_mutex_unlock(&_mutex);
       #elif defined(WIN32) || defined(WIN64) || defined(WINDOWS)
-      WaitForSingleObject(_handle, timeout);
+      WaitForSingleObject(_handle, (DWORD)timeout);
       #endif    
    }
    

@@ -19,7 +19,10 @@
 #define ISNAN(a) ((a) != (a)) 
 
 #include <cstdlib>
+
+#if defined(__linux__) || defined(__APPLE__)
 #include <unistd.h>
+#endif 
 
 #include "Test.h"
 #include "Timer.h"
@@ -29,7 +32,7 @@ int main()
 {
    aire::Test test("Watch-Test");
 
-   test.add("Check timer and overhead", [] () {
+   test.add("Check timer and overhead", [] () -> int {
       int result = EXIT_SUCCESS;
       aire::Timer t;
       unsigned int nloops = 100;
@@ -68,7 +71,7 @@ int main()
    }
    );
 
-   test.add("Simple timer", [] () {
+   test.add("Simple timer", [] () -> int {
       int result = EXIT_SUCCESS;
       aire::StopWatch::GetInstance()->getTimer("One timer")->start();
       #if defined(__linux__) || defined(__APPLE__)
@@ -81,7 +84,7 @@ int main()
    }
    );
    
-   test.add("Nested timer", [] () {
+   test.add("Nested timer", [] () -> int {
       int result = EXIT_SUCCESS;
       aire::StopWatch::GetInstance()->getTimer("Outer timer")->start();
       #if defined(__linux__) || defined(__APPLE__)

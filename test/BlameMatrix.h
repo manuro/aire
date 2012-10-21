@@ -112,10 +112,10 @@ int32_t invPositive()
          A[idx(1,0)] = 1;
          A[idx(1,1)] = 3;
          
-         B[idx(0,0)] = 0.3;
-         B[idx(0,1)] = -0.2;
-         B[idx(1,0)] = -0.1;
-         B[idx(1,1)] = 0.4;
+         B[idx(0,0)] = (TYPE)0.3;
+         B[idx(0,1)] = (TYPE)-0.2;
+         B[idx(1,0)] = (TYPE)-0.1;
+         B[idx(1,1)] = (TYPE)0.4;
       }
       else if(N == 1)
       {

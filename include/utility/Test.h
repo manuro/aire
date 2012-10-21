@@ -24,6 +24,7 @@
 #include <cstdint>
 #include <map>
 #include <vector>
+#include <string>
 
 //! \brief Global aire namespace.
 namespace aire
