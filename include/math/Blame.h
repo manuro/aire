@@ -188,7 +188,7 @@ inline TYPE det(const TYPE* A, std::function<uint32_t (uint32_t, uint32_t)> idx)
 //! \throw std::logic_error If det(A) < 1e-15
 template<class TYPE, uint32_t N>
 inline void inv(TYPE* A, std::function<uint32_t (uint32_t,uint32_t)> idx) 
-throw(...)
+throw()
 {
    TYPE d = det<TYPE,N>(A, idx);
 
