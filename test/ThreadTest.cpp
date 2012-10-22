@@ -18,6 +18,7 @@
 #include <cmath>
 #include <cstdint>
 #include <thread>
+#include <chrono>
 
 #include "Test.h"
 #include "Event.h"
@@ -55,7 +56,6 @@ static aire::Event eventTwo;
 void functionOne()
 {
    eventOne.wait();
-   eventOne.resetSignal();
    // Do something senseful
    eventTwo.signal();
 }
@@ -63,9 +63,9 @@ void functionOne()
 void functionTwo()
 {
    // Do something senseful
+   std::this_thread::sleep_for(std::chrono::seconds(1));
    eventOne.signal();
-   eventTwo.wait();
-   eventTwo.resetSignal();   
+   eventTwo.wait(); 
 }
 
 int32_t signalAndWait()
