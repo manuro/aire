@@ -19,10 +19,8 @@
 #define ISNAN(a) ((a) != (a)) 
 
 #include <cstdlib>
-
-#if defined(__linux__) || defined(__APPLE__)
-#include <unistd.h>
-#endif 
+#include <thread>
+#include <chrono>
 
 #include "Test.h"
 #include "Timer.h"
@@ -40,11 +38,7 @@ int main()
       t.start();
       for(unsigned int i = 0; i < nloops; i++)
       {
-         #if defined(__linux__) || defined(__APPLE__)
-         usleep(1000);
-         #elif defined(_WIN32) || defined(_WIN64) || defined(_WINDOWS)
-         Sleep(1);
-         #endif
+         std::this_thread::sleep_for(std::chrono::milliseconds(10));
       }
       t.stop();
       
@@ -74,11 +68,7 @@ int main()
    test.add("Simple timer", [] () -> int {
       int result = EXIT_SUCCESS;
       aire::StopWatch::GetInstance()->getTimer("One timer")->start();
-      #if defined(__linux__) || defined(__APPLE__)
-      usleep(1000);
-      #elif defined(_WIN32) || defined(_WIN64) || defined(_WINDOWS)
-      Sleep(1);
-      #endif
+      std::this_thread::sleep_for(std::chrono::milliseconds(10));
       aire::StopWatch::GetInstance()->getTimer("One timer")->stop();
       return result;
    }
@@ -87,17 +77,9 @@ int main()
    test.add("Nested timer", [] () -> int {
       int result = EXIT_SUCCESS;
       aire::StopWatch::GetInstance()->getTimer("Outer timer")->start();
-      #if defined(__linux__) || defined(__APPLE__)
-      usleep(1000);
-      #elif defined(_WIN32) || defined(_WIN64) || defined(_WINDOWS)
-      Sleep(1);
-      #endif
+      std::this_thread::sleep_for(std::chrono::milliseconds(10));
       aire::StopWatch::GetInstance()->getTimer("Inner timer")->start();
-      #if defined(__linux__) || defined(__APPLE__)
-      usleep(1000);
-      #elif defined(_WIN32) || defined(_WIN64) || defined(_WINDOWS)
-      Sleep(1);
-      #endif
+      std::this_thread::sleep_for(std::chrono::milliseconds(10));
       aire::StopWatch::GetInstance()->getTimer("Inner timer")->stop();
       aire::StopWatch::GetInstance()->getTimer("Outer timer")->stop();
       return result;
@@ -105,6 +87,8 @@ int main()
    );
 
    test.run();
+
+   aire::StopWatch::GetInstance()->printTime(std::cout, false);
   
    return EXIT_SUCCESS;
 }

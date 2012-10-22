@@ -18,93 +18,60 @@
 #define THREADSYNC_H
 
 #include <cstdint>
+#include <thread>
 
-#include "Thread.h"
 #include "Event.h"
-#include "Mutex.h"
 #include "Stream.h"
 
 // --- Thread output -----------------------------------------------------------
-void* outputFunc(void* data)
+void outputFunc()
 {
-   unsigned long tid = aire::Thread::GetId();
+   std::thread::id tid = std::this_thread::get_id();
    std::cout << (aire::Stream() << "Thread " << tid << "\n").toString();
-   return nullptr;
 }
 
 template<uint32_t N>
 int32_t threadOutput()
 {
-   aire::Thread thread[N];
-
+   std::thread threads[N];
+   
    for(uint32_t i = 0; i < N; i++)
    {
-      thread[i].initialize(&outputFunc, nullptr);
+      threads[i] = std::thread(&outputFunc);
    }
 
    for(uint32_t i = 0; i < N; i++)
    {
-      thread[i].join();
-   }
-
-   return EXIT_SUCCESS;
-}
-
-// --- Mutex -------------------------------------------------------------------
-aire::Mutex mutex(false);
-
-void* mutexFunc(void* data)
-{
-   mutex.lock();
-   // Do something senseful
-   mutex.unlock();
-   return nullptr;
-}
-
-template<uint32_t N>
-int32_t lockWithMutex()
-{
-   aire::Thread thread[N];
-
-   for(uint32_t i = 0; i < N; i++)
-   {
-      thread[i].initialize(&mutexFunc, nullptr);
-   }
-
-   for(uint32_t i = 0; i < N; i++)
-   {
-      thread[i].join();
+      threads[i].join();
    }
 
    return EXIT_SUCCESS;
 }
 
 // --- Signal and wait ---------------------------------------------------------
-static aire::Event barrierOne;
-static aire::Event barrierTwo;
+static aire::Event eventOne;
+static aire::Event eventTwo;
 
-void* eventOne(void* data)
+void functionOne()
 {
-   barrierOne.wait();
-   barrierOne.resetSignal();
+   eventOne.wait();
+   eventOne.resetSignal();
    // Do something senseful
-   barrierTwo.signal();
-   return nullptr;
+   eventTwo.signal();
 }
 
-void* eventTwo(void* data)
+void functionTwo()
 {
    // Do something senseful
-   barrierOne.signal();
-   barrierTwo.wait();
-   barrierTwo.resetSignal();   
-   return nullptr;
+   eventOne.signal();
+   eventTwo.wait();
+   eventTwo.resetSignal();   
 }
 
 int32_t signalAndWait()
 {
-   aire::Thread threadOne(&eventOne, nullptr);
-   aire::Thread threadTwo(&eventTwo, nullptr);
+   std::thread threadOne(functionOne);
+   std::thread threadTwo(functionTwo);
 
    threadOne.join();
    threadTwo.join();

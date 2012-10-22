@@ -32,7 +32,7 @@ endif
 # Target binary, object and source(include) directory 
 BIN_DIR   = bin
 OBJ_DIR   = obj
-INC_DIR   = ./include/utility ./include/math
+INC_DIR   = ./include
 
 # Test cases
 TEST_SRC  = $(notdir $(wildcard test/*.cpp))

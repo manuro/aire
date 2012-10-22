@@ -20,12 +20,13 @@
 #include <cassert>
 #include <new>
 #include <cstdlib>
-
-#include "Guard.h"
+#include <mutex>
 
 //! \brief Global aire namespace.
 namespace aire
 {
+
+std::mutex localMutex;
 
 //! \brief Singleton templated design pattern.
 //
@@ -41,7 +42,7 @@ public:
    //! \return The instance of the singleton.
    static T* GetInstance()
    {
-      Guard lock;
+      std::lock_guard<std::mutex> lock(localMutex);
       if(_instance == nullptr) 
       {
          try
@@ -61,7 +62,7 @@ public:
   
   static void destroy()
   {
-      Guard lock;
+      std::lock_guard<std::mutex> lock(localMutex);
       if(_instance != nullptr)
       {
          delete _instance;

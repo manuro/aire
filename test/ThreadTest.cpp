@@ -22,10 +22,6 @@
 int main()
 {
    aire::Test test("Thread-Test");
-   
-   test.add("Lock with mutex (2 threads)", lockWithMutex<2>);
-   test.add("Lock with mutex (8 threads)", lockWithMutex<8>);
-   test.add("Lock with mutex (32 threads)", lockWithMutex<32>);
 
    test.add("Signal and wait (2 threads)", signalAndWait);
 

@@ -90,7 +90,7 @@ public:
          totalTime += it->second->getTime(isAverage);
       }
       stream << "-------------------------------------------------------------" 
-             << "---" << std::endl;
+             << "-----" << std::endl;
       
       // Iterate over all timers and print the total time
       for(auto it = _timers.begin(); it != _timers.end(); ++it) 
@@ -116,7 +116,7 @@ public:
       
       // Print out the total time
       stream << "-------------------------------------------------------------" 
-             << "---" << std::endl
+             << "-----" << std::endl
              << std::scientific
              << "Total                                    " << totalTime
              << std::resetiosflags(::std::ios::scientific) << std::endl;
