@@ -20,13 +20,14 @@
 #include "System.h"
 #include "Test.h"
 
+// --- Main --------------------------------------------------------------------
 int main()
 {
    // At this time we have only a cute system output test.
    auto func = [] () -> int {
       int result = EXIT_SUCCESS;
 
-      std::cout << aire::System::GetNumCores() << std::endl;
+      std::cout << "Cores: " << aire::System::GetNumCores() << std::endl;
 
       return result;
    };

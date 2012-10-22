@@ -13,12 +13,73 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 //
 //! \file ThreadTest.cpp
-//! \brief Test case for the Thread, Mutex and Event class. 
+//! \brief Test case for some multi-threadding stuff. 
 #include <cstdlib>
 #include <cmath>
-#include "Test.h"
-#include "ThreadSync.h"
+#include <cstdint>
+#include <thread>
 
+#include "Test.h"
+#include "Event.h"
+#include "Stream.h"
+
+// --- Thread output -----------------------------------------------------------
+void outputFunc()
+{
+   std::thread::id tid = std::this_thread::get_id();
+   std::cout << (aire::Stream() << "Thread " << tid << "\n").toString();
+}
+
+template<uint32_t N>
+int32_t threadOutput()
+{
+   std::thread threads[N];
+   
+   for(uint32_t i = 0; i < N; i++)
+   {
+      threads[i] = std::thread(&outputFunc);
+   }
+
+   for(uint32_t i = 0; i < N; i++)
+   {
+      threads[i].join();
+   }
+
+   return EXIT_SUCCESS;
+}
+
+// --- Signal and wait ---------------------------------------------------------
+static aire::Event eventOne;
+static aire::Event eventTwo;
+
+void functionOne()
+{
+   eventOne.wait();
+   eventOne.resetSignal();
+   // Do something senseful
+   eventTwo.signal();
+}
+
+void functionTwo()
+{
+   // Do something senseful
+   eventOne.signal();
+   eventTwo.wait();
+   eventTwo.resetSignal();   
+}
+
+int32_t signalAndWait()
+{
+   std::thread threadOne(functionOne);
+   std::thread threadTwo(functionTwo);
+
+   threadOne.join();
+   threadTwo.join();
+
+   return EXIT_SUCCESS;
+}
+
+// --- Main --------------------------------------------------------------------
 int main()
 {
    aire::Test test("Thread-Test");

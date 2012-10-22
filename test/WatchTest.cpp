@@ -16,8 +16,7 @@
 //! \brief Test driver of watch and timer class. 
 
 /**< \brief Is not a number according to IEEE standard. */
-#define ISNAN(a) ((a) != (a)) 
-
+#include <cmath>
 #include <cstdlib>
 #include <thread>
 #include <chrono>
@@ -26,6 +25,7 @@
 #include "Timer.h"
 #include "Watch.h"
 
+// --- Main --------------------------------------------------------------------
 int main()
 {
    aire::Test test("Watch-Test");
@@ -46,19 +46,14 @@ int main()
       std::cout << "Average time: " << t.getTime(true) << std::endl;
       std::cout << "Overhead: " << t.getTimeOverhead() << std::endl;
       
-      if(t.getTimeOverhead() > 1e-6 || ISNAN(t.getTimeOverhead()))
+      if(t.getTimeOverhead() > 1e-6 || std::isnan(t.getTimeOverhead()))
       {
          std::cerr << "Timestamp overhead is bad!" << std::endl;
          result = EXIT_FAILURE;
       } 
-      if(ISNAN(t.getTime(false)))
+      if(std::isnan(t.getTime(false)))
       {
          std::cerr << "Wall time measurement is wrong!" << std::endl;
-         result = EXIT_FAILURE;
-      }
-      if(ISNAN(t.getTime(true)))
-      {
-         std::cerr << "Average time measurement is wrong!" << std::endl;
          result = EXIT_FAILURE;
       }
       return result;

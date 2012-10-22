@@ -17,6 +17,8 @@
 #ifndef TIMER_H
 #define TIMER_H
 
+#include <cmath>
+
 #if defined(__linux__) || defined(__APPLE__)
 #include <time.h> 
 #include <sys/time.h>
@@ -68,7 +70,7 @@ public:
    {
       _count = 0;
       _timeSpan = 0;
-      _timeOverhead = 0;
+      _timeOverhead = NAN;
       _isRunning = false;
       #if defined(_WIN32) || defined(_WIN64) || defined(_WINDOWS)
       _startTime = 0;
@@ -149,7 +151,7 @@ public:
    //! \return The overhead for a time single time stap request.
    double getTimeOverhead()
    {
-      if(_timeOverhead == 0)
+      if(std::isnan(_timeOverhead))
       {
          computeOverhead();
       }
