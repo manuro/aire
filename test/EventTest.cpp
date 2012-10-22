@@ -12,7 +12,7 @@
 // You should have received a copy of the GNU General Public License  
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 //
-//! \file ThreadTest.cpp
+//! \file EventTest.cpp
 //! \brief Test case for some multi-threadding stuff. 
 #include <cstdlib>
 #include <cmath>

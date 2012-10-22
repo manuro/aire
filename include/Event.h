@@ -49,7 +49,7 @@ public:
    void wait(uint64_t timeout)
    {
       std::unique_lock<std::mutex> lock(_mutex);
-      while(!_signaled)
+      while(!_signaled) // loop to avoid spurious wakeups
       {
          _signal.wait_for(lock, std::chrono::milliseconds(timeout));
       }
@@ -60,7 +60,7 @@ public:
    void wait()
    {
       std::unique_lock<std::mutex> lock(_mutex);
-      while(!_signaled)
+      while(!_signaled) // loop to avoid spurious wakeups
       {
          _signal.wait(lock);
       }
