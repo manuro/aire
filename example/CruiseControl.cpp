@@ -2,6 +2,9 @@
 #include <cstring>
 #include <iostream>
 
+// Frage: Wann wird neuer Zustand ausgefuehrt? 
+// In welchem Zeit bereich der Zeitscheibe ?
+
 namespace State {
 enum Machine {
    ON  = 1,  // On
@@ -134,13 +137,13 @@ int main(int argc, char* argv[])
    state = State::OFF;
    Signal::Bus signal = Signal::OFF;
 
-   std::cout << "Input a signal: on, off, set, res, inc, dec, brk" << std::endl;
+   std::cout << "Input signal: on, off, set, res, inc, dec, brk" << std::endl;
    std::cout << "Input signal: esc to exit cruise control" << std::endl;
 
    while(true)
    {
       std::string input;
-      getline(std::cin, input);
+      std::cout << "Input: "; getline(std::cin, input);
       std::cout << "Signal was: " << input << std::endl;
       if(input.find("on") == 0)  signal = Signal::ON;
       else if(input.find("off") == 0) signal = Signal::OFF;
