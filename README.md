@@ -15,7 +15,7 @@ send a short mail with the things you want to add to start a discussion.
 * Add only GPLv3 or compatible licenced code to the repository.
 
 ### Contributors
-[manuro] Manuel Rodriguez Rodriguez
+[manuro]
 
 ### Development process
 
@@ -26,7 +26,6 @@ could be that the neccessary functionality is already implemented. Also maybe
 the developer can help you to start designing your module.  
 Important note: **New module names have to be approved by all developers.**
 
-0. Write README about the contributed software.
 1. Clone the git repository.
 2. Develop the test case for your code.
 3. Run all test cases in the project.
@@ -181,14 +180,5 @@ Use this copyright in any source file that is provided within this project:
     //
     //! \file <filename>
     //! \brief <File description>
-
-### Documentation
-
-A short README must be written for every module. The definition 
-of a module is an encapsulated functionality that has an interface and 
-a defined behavior for a particular problem.  
-Use the document under "doc/Template.txt" to write the README. Save the 
-README for the module in a folder called "doc/ModuleName.txt".
-
 
 

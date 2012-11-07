@@ -15,7 +15,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 Module: utility
 
 Developers: 
-Manuel Rodriguez Rodriguez <famrods@gmail.com> [manuro]
+Manuro <manuro@live.de> [manuro]
 
 1. Abstract
 -------------------------------------------------------------------------------
