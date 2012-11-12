@@ -25,6 +25,9 @@
 #include "Timer.h"
 #include "Watch.h"
 
+//! \brief Singleton type of the watch.
+typedef aire::Singleton<aire::Watch<char>> StopWatch;
+
 // --- Main --------------------------------------------------------------------
 int main()
 {
@@ -62,28 +65,28 @@ int main()
 
    test.add("Simple timer", [] () -> int {
       int result = EXIT_SUCCESS;
-      aire::StopWatch::GetInstance()->getTimer("One timer")->start();
+      StopWatch::GetInstance()->getTimer("One timer")->start();
       std::this_thread::sleep_for(std::chrono::milliseconds(10));
-      aire::StopWatch::GetInstance()->getTimer("One timer")->stop();
+      StopWatch::GetInstance()->getTimer("One timer")->stop();
       return result;
    }
    );
    
    test.add("Nested timer", [] () -> int {
       int result = EXIT_SUCCESS;
-      aire::StopWatch::GetInstance()->getTimer("Outer timer")->start();
+      StopWatch::GetInstance()->getTimer("Outer timer")->start();
       std::this_thread::sleep_for(std::chrono::milliseconds(10));
-      aire::StopWatch::GetInstance()->getTimer("Inner timer")->start();
+      StopWatch::GetInstance()->getTimer("Inner timer")->start();
       std::this_thread::sleep_for(std::chrono::milliseconds(10));
-      aire::StopWatch::GetInstance()->getTimer("Inner timer")->stop();
-      aire::StopWatch::GetInstance()->getTimer("Outer timer")->stop();
+      StopWatch::GetInstance()->getTimer("Inner timer")->stop();
+      StopWatch::GetInstance()->getTimer("Outer timer")->stop();
       return result;
    }
    );
 
    test.run();
 
-   aire::StopWatch::GetInstance()->printTime(std::cout, false);
+   StopWatch::GetInstance()->printTime(std::cout, false);
   
    return EXIT_SUCCESS;
 }
