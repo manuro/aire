@@ -15,7 +15,6 @@
 //! \file WatchTest.cpp
 //! \brief Test driver of watch and timer class. 
 
-/**< \brief Is not a number according to IEEE standard. */
 #include <cmath>
 #include <cstdlib>
 #include <thread>
@@ -33,43 +32,46 @@ int main()
 {
    aire::Test test("Watch-Test");
 
-   test.add("Check timer and overhead", [] () -> int {
-      int result = EXIT_SUCCESS;
-      aire::Timer t;
-      unsigned int nloops = 100;
-
-      t.start();
-      for(unsigned int i = 0; i < nloops; i++)
+   test.add("Check timer and overhead", [] () -> int 
       {
-         std::this_thread::sleep_for(std::chrono::milliseconds(10));
+         int result = EXIT_SUCCESS;
+         aire::Timer t;
+         unsigned int nloops = 100;
+
+         t.start();
+         for(unsigned int i = 0; i < nloops; i++)
+         {
+            std::this_thread::sleep_for(std::chrono::milliseconds(10));
+         }
+         t.stop();
+         
+         std::cout << "Wall time: " << t.getTime(false) << std::endl;
+         std::cout << "Average time: " << t.getTime(true) << std::endl;
+         return result;
       }
-      t.stop();
-      
-      std::cout << "Wall time: " << t.getTime(false) << std::endl;
-      std::cout << "Average time: " << t.getTime(true) << std::endl;
-      return result;
-   }
    );
 
-   test.add("Simple timer", [] () -> int {
-      int result = EXIT_SUCCESS;
-      StopWatch::GetInstance()->getTimer("One timer")->start();
-      std::this_thread::sleep_for(std::chrono::milliseconds(10));
-      StopWatch::GetInstance()->getTimer("One timer")->stop();
-      return result;
-   }
+   test.add("Simple timer", [] () -> int 
+      {
+         int result = EXIT_SUCCESS;
+         StopWatch::GetInstance()->getTimer("One timer")->start();
+         std::this_thread::sleep_for(std::chrono::milliseconds(10));
+         StopWatch::GetInstance()->getTimer("One timer")->stop();
+         return result;
+      }
    );
    
-   test.add("Nested timer", [] () -> int {
-      int result = EXIT_SUCCESS;
-      StopWatch::GetInstance()->getTimer("Outer timer")->start();
-      std::this_thread::sleep_for(std::chrono::milliseconds(10));
-      StopWatch::GetInstance()->getTimer("Inner timer")->start();
-      std::this_thread::sleep_for(std::chrono::milliseconds(10));
-      StopWatch::GetInstance()->getTimer("Inner timer")->stop();
-      StopWatch::GetInstance()->getTimer("Outer timer")->stop();
-      return result;
-   }
+   test.add("Nested timer", [] () -> int 
+      {
+         int result = EXIT_SUCCESS;
+         StopWatch::GetInstance()->getTimer("Outer timer")->start();
+         std::this_thread::sleep_for(std::chrono::milliseconds(10));
+         StopWatch::GetInstance()->getTimer("Inner timer")->start();
+         std::this_thread::sleep_for(std::chrono::milliseconds(10));
+         StopWatch::GetInstance()->getTimer("Inner timer")->stop();
+         StopWatch::GetInstance()->getTimer("Outer timer")->stop();
+         return result;
+      }
    );
 
    test.run();

@@ -26,7 +26,7 @@
 namespace aire
 {
 
-std::mutex localMutex;
+std::mutex globalMutex;
 
 //! \brief Singleton templated design pattern.
 //
@@ -34,21 +34,21 @@ std::mutex localMutex;
 // C++ and the Perils of Double-Checked Locking, Doctor Dobb's Journal, 2004.
 // Locking every time the Singleton is accessed is the best way to ensure 
 // thread safety.
-template<class T>
+template<class ClassType>
 class Singleton
 {
 public:
    //! \brief Access the instance member.
    //! \return The instance of the singleton.
-   static T* GetInstance()
+   static ClassType* GetInstance()
    {
-      std::lock_guard<std::mutex> lock(localMutex);
+      std::lock_guard<std::mutex> lock(globalMutex);
       if(_instance == nullptr) 
       {
          try
          {
-            _instance = new T;
-            atexit(Singleton<T>::destroy);
+            _instance = new ClassType;
+            atexit(Singleton<ClassType>::destroy);
          }
          catch(std::bad_alloc& e)
          {
@@ -62,7 +62,7 @@ public:
   
   static void destroy()
   {
-      std::lock_guard<std::mutex> lock(localMutex);
+      std::lock_guard<std::mutex> lock(globalMutex);
       if(_instance != nullptr)
       {
          delete _instance;
@@ -78,7 +78,7 @@ protected:
   
 private:
    //! \brief The singleton class instance.
-   static T* _instance;
+   static ClassType* _instance;
    
    //! \brief Private copy constructor.
    Singleton(Singleton const&);
@@ -88,8 +88,8 @@ private:
 };
 
 // Initialize static instance to null.
-template<class T> 
-T* Singleton<T>::_instance = nullptr;
+template<class ClassType> 
+ClassType* Singleton<ClassType>::_instance = nullptr;
 
 }
 #endif

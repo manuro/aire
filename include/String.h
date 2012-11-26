@@ -29,9 +29,9 @@ public:
    //! \param text String to analyze.
    //! \param key Substring to search for.
    //! \return Number of substring occurrences. 
-   template<class T>
-   static uint32_t CountSubstr(const std::basic_string<T>& text,
-      const std::basic_string<T>& key)
+   template<class CharType>
+   static uint32_t CountSubstr(const std::basic_string<CharType>& text,
+      const std::basic_string<CharType>& key)
    {
       uint32_t count = 0;
       size_t pos = text.find(key);
@@ -48,13 +48,13 @@ public:
    //! \param key Substring to search for.
    //! \param value Substitution string.
    //! \return New string with the substitutions.
-   template<class T>
-   static std::basic_string<T> ReplaceSubstr(
-      const std::basic_string<T>& text,
-      const std::basic_string<T>& key,
-      const std::basic_string<T>& value)
+   template<class CharType>
+   static std::basic_string<CharType> ReplaceSubstr(
+      const std::basic_string<CharType>& text,
+      const std::basic_string<CharType>& key,
+      const std::basic_string<CharType>& value)
    {
-      std::basic_string<T> result(text);
+      std::basic_string<CharType> result(text);
       size_t pos = result.find(key);
       while(pos != std::string::npos)
       {

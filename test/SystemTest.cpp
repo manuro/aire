@@ -24,7 +24,8 @@
 int main()
 {
    // At this time we have only a cute system output test.
-   auto func = [] () -> int {
+   auto func = [] () -> int 
+   {
       int result = EXIT_SUCCESS;
 
       std::cout << "Cores: " << aire::System::GetNumCores() << std::endl;

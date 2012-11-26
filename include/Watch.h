@@ -36,7 +36,7 @@ namespace aire
 // This class is not thread safe and it is not suposed 
 // to be thread safe. In a multi-threadded environment 
 // each thread might want to have it's own watch. 
-template<class T>
+template<class KeyType>
 class Watch
 {
 public:
@@ -58,7 +58,7 @@ public:
    //! \brief Access method for a timer.
    //! \param name The string literal containing the timer name.
    //! \return Returns the timer corresponding to the string.
-   std::unique_ptr<Timer> const& getTimer(std::basic_string<T> name)
+   std::unique_ptr<Timer> const& getTimer(std::basic_string<KeyType> name)
    {
       // Look if the timer exists   
       auto it = _timers.find(name);
@@ -66,7 +66,7 @@ public:
       {
          // Create timer if there is no timer for the name
          auto newTimer =_timers.insert(
-            std::pair<std::basic_string<T>, std::unique_ptr<Timer>>(name,
+            std::pair<std::basic_string<KeyType>, std::unique_ptr<Timer>>(name,
             std::move(std::unique_ptr<Timer>(new Timer()))));
          return newTimer.first->second;
       }
@@ -79,7 +79,7 @@ public:
    //! \brief Prints the total time recorded by all timers.
    //! \param isAverage Specifies to print average values.
    //! \param stream The output stream to print to.
-   void printTime(std::basic_ostream<T>& stream, bool isAverage = false)
+   void printTime(std::basic_ostream<KeyType>& stream, bool isAverage = false)
    {
       // Maximum lendth of the timer name
       unsigned int maxlen = 40;
@@ -97,7 +97,7 @@ public:
       for(auto it = _timers.begin(); it != _timers.end(); ++it) 
       {
          unsigned int respace = maxlen;
-         std::basic_string<T> output = it->first;
+         std::basic_string<KeyType> output = it->first;
          if(it->first.length() > maxlen)
          {
             // Resize the string
@@ -125,7 +125,7 @@ public:
    
 private:
    //! \brief Hash-map of timers.  
-   std::map<std::basic_string<T>, std::unique_ptr<Timer>> _timers;
+   std::map<std::basic_string<KeyType>, std::unique_ptr<Timer>> _timers;
 
    //! \brief Private copy constructor. 
    Watch(Watch const&);

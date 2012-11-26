@@ -89,7 +89,6 @@ public:
       uint32_t i = 0;
       std::vector<std::string> failed;
       
-      // For every test function
       for(auto it = _test.begin(); it != _test.end(); it++)
       {
          k++;
@@ -112,7 +111,6 @@ public:
       std::clog << "Pass: " << (k-i) << "/" << k << " Fail: " << i << std::endl;
       std::cout << "Pass: " << (k-i) << "/" << k << " Fail: " << i << std::endl;
       
-      // Print out faild cases
       for(auto it = failed.begin(); it != failed.end(); it++)
       {
          std::clog << "Fail: " << *it << std::endl;

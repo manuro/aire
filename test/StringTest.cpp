@@ -26,56 +26,60 @@ int main()
 {
    aire::Test test("String-Test");
    
-   test.add("Substring count UTF-16", [] () -> int {
-      int result = EXIT_SUCCESS;   
-      std::basic_string<char> text("Ni N NI nI NiiniNi Niii");      
-      uint32_t count = aire::String::CountSubstr<char>(text, "Ni");
-      if(count != 4) 
+   test.add("Substring count UTF-16", [] () -> int 
       {
-         result = EXIT_FAILURE;
+         int result = EXIT_SUCCESS;   
+         std::basic_string<char> text("Ni N NI nI NiiniNi Niii");      
+         uint32_t count = aire::String::CountSubstr<char>(text, "Ni");
+         if(count != 4) 
+         {
+            result = EXIT_FAILURE;
+         }
+         return result;
       }
-      return result;
-   }
    );
 
-   test.add("Substring count UTF-8", [] () -> int {
-      int result = EXIT_SUCCESS;
-      std::basic_string<wchar_t> text(L"Ni N NI nI NiiniNi Niii");      
-      uint32_t count = aire::String::CountSubstr<wchar_t>(text, L"Ni");
-      if(count != 4) 
+   test.add("Substring count UTF-8", [] () -> int 
       {
-         result = EXIT_FAILURE;
+         int result = EXIT_SUCCESS;
+         std::basic_string<wchar_t> text(L"Ni N NI nI NiiniNi Niii");      
+         uint32_t count = aire::String::CountSubstr<wchar_t>(text, L"Ni");
+         if(count != 4) 
+         {
+            result = EXIT_FAILURE;
+         }
+         return result;
       }
-      return result;
-   }
    );
 
-   test.add("Substring replace UTF-16", [] () -> int {
-      int result = EXIT_SUCCESS;   
-      std::basic_string<char> text("Ni N NI nI NiiniNi Niii");      
-      std::basic_string<char> key("Ni");
-      std::basic_string<char> value("XYZ");
-      auto replace = aire::String::ReplaceSubstr<char>(text, key, value);
-      if(replace != "XYZ N NI nI XYZiniXYZ XYZii") 
+   test.add("Substring replace UTF-16", [] () -> int 
       {
-         result = EXIT_FAILURE;
+         int result = EXIT_SUCCESS;   
+         std::basic_string<char> text("Ni N NI nI NiiniNi Niii");      
+         std::basic_string<char> key("Ni");
+         std::basic_string<char> value("XYZ");
+         auto replace = aire::String::ReplaceSubstr<char>(text, key, value);
+         if(replace != "XYZ N NI nI XYZiniXYZ XYZii") 
+         {
+            result = EXIT_FAILURE;
+         }
+         return result;
       }
-      return result;
-   }
    );
    
-   test.add("Substring replace UTF-8", [] () -> int {
-      int result = EXIT_SUCCESS;   
-      std::basic_string<wchar_t> text(L"Ni N NI nI NiiniNi Niii");      
-      std::basic_string<wchar_t> key(L"Ni");
-      std::basic_string<wchar_t> value(L"XYZ");
-      auto replace = aire::String::ReplaceSubstr<wchar_t>(text, key, value);
-      if(replace != L"XYZ N NI nI XYZiniXYZ XYZii") 
+   test.add("Substring replace UTF-8", [] () -> int 
       {
-         result = EXIT_FAILURE;
+         int result = EXIT_SUCCESS;   
+         std::basic_string<wchar_t> text(L"Ni N NI nI NiiniNi Niii");      
+         std::basic_string<wchar_t> key(L"Ni");
+         std::basic_string<wchar_t> value(L"XYZ");
+         auto replace = aire::String::ReplaceSubstr<wchar_t>(text, key, value);
+         if(replace != L"XYZ N NI nI XYZiniXYZ XYZii") 
+         {
+            result = EXIT_FAILURE;
+         }
+         return result;
       }
-      return result;
-   }
    );
 
 

@@ -50,7 +50,7 @@ public:
    //! of this function must be here.
    //! \param data Templated data to be added to the stream.
    //! \return The class itself.
-   template<class T> Stream& operator<<(const T& data);
+   template<class StreamType> Stream& operator<<(const StreamType& data);
  
 private:
    //! \brief Output stream member. 
@@ -64,7 +64,7 @@ private:
 };
 
 
-template<class T> Stream& Stream::operator<<(const T& data)
+template<class StreamType> Stream& Stream::operator<<(const StreamType& data)
 {
    _outStream << data;
    return *this;
