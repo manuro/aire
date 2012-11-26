@@ -30,7 +30,7 @@ CPP_FLAGS = -O3 -Wall -DNDEBUG -std=c++0x
 endif
 
 # Define C/C++ compiler 
-CPP       = g++
+CPP       = /usr/lib/gcc-snapshot/bin/g++
 
 # Doxygen executable
 DOX       = doxygen
